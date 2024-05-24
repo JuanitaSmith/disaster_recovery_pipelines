@@ -1,0 +1,23 @@
+*.idea*
+.idea/datascience_nanodegree.iml
+.idea/misc.xml
+.pyc
+__pycache__
+.ipynb_checkpoints
+project1_data_science_blog/notebooks/Part_II_exploration_to_delete_after.ipynb
+project1_data_science_blog/data/raw/calendar/london/*
+project1_data_science_blog/data/raw/listings/london/*
+project1_data_science_blog/data/raw/listings_summary/london/*
+project1_data_science_blog/data/raw/reviews/london/*
+project1_data_science_blog/data/raw/reviews_summary/london/*
+project1_data_science_blog/notebooks/4_Price_Prediction.ipynb
+project1_data_science_blog/notebooks/pipe examples with transformers.ipynb
+project1_data_science_blog/notebooks/plot_linear_model_coefficient_interpretation.ipynb
+project1_data_science_blog/notebooks/plot_linear_model_coefficient_interpretation 2.ipynb
+project1_data_science_blog/notebooks/plot_linear_model_coefficient_interpretation_airbnb.ipynb
+project1_data_science_blog/notebooks/plot_underfitting_overfitting.ipynb
+project1_data_science_blog/notebooks/Testing Linear Regression Assumptions in Python.ipynb
+project1_data_science_blog/notebooks/Untitled.ipynb
+/project1_data_science_blog/notebooks/columntranform distort shape.ipynb
+project1_data_science_blog/notebooks/plot_cv_indices.ipynb
+/project1_data_science_blog/notebooks/4_Price_Prediction_latest-Copy1.ipynb

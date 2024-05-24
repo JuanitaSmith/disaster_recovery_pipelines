@@ -1,0 +1,14 @@
+pandas
+numpy
+requests
+jupyter
+nb_conda
+lxml
+sqlalchemy
+pycountry
+matplotlib
+seaborn
+chardet
+nltk
+sentence-transformers
+pinecone-client
