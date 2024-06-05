@@ -17,3 +17,5 @@ imbalanced-learn
 scikit-multilearn
 iterative-stratification
 xgboost
+conda install sagemaker-python
+boto3
