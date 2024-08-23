@@ -1,0 +1,10 @@
+INFO:__main__:Loading data...
+    MESSAGES: disaster_messages.csv
+    CATEGORIES: disaster_categories.csv
+INFO:__main__:File disaster_messages.csv loaded with shape (26248, 4)
+INFO:__main__:File disaster_categories.csv loaded with shape (26248, 2)
+INFO:__main__:Cleaning data...
+INFO:__main__:36 categories present in csv file
+INFO:__main__:Data cleaning completed with shape (26179, 37)
+INFO:__main__:Saving data....
+INFO:__main__:Cleaned data saved to database sqlite:///DisasterResponse.db
