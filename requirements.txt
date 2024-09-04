@@ -17,5 +17,9 @@ imbalanced-learn
 scikit-multilearn
 iterative-stratification
 xgboost
-conda install sagemaker-python
 boto3
+tiktoken
+wordcloud
+pytest
+optuna
+imbalanced-learn

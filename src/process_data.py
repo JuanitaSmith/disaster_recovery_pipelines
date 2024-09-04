@@ -1,13 +1,17 @@
+""" This script import and clean disaster recovery messages """
+
 import sys
 import pandas as pd
 from sqlalchemy import create_engine
 import logging
-
-FILE_LOG = 'disaster_load.log'
-
+import config
 # activate logging
 logger = logging.getLogger(__name__)
-logging.basicConfig(filename=FILE_LOG, filemode='w', level=logging.INFO)
+logging.basicConfig(filename=config.path_log_process_data,
+                    format='%(asctime)s %(levelname)-8s %(message)s',
+                    filemode='w',
+                    level=logging.INFO,
+                    datefmt='%Y-%m-%d %H:%M:%S')
 
 
 def load_data(messages_filepath, categories_filepath):
@@ -22,7 +26,6 @@ def load_data(messages_filepath, categories_filepath):
         messages -> dataframe : pandas dataframe containing all text messages
         categories -> dataframe : pandas dataframe containing all categories text messages belongs to
     """
-
 
     logger.info('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
                 .format(messages_filepath, categories_filepath))
@@ -67,7 +70,7 @@ def clean_categories(categories):
         # convert column from string to numeric
         categories[column] = pd.to_numeric(categories[column], downcast='integer')
 
-    logger.info('{} categories present in csv file'.format(categories.shape[1]))
+    logger.info('{} categories present in raw csv file'.format(categories.shape[1]))
 
     return categories
 
@@ -138,45 +141,40 @@ def save_data(df, database_filename):
 
     logger.info('Saving data....')
 
-    file_name = 'sqlite:///' + database_filename
-    engine = create_engine(file_name)
+    engine = create_engine(database_filename)
     df.to_sql('messages', engine, index=True, if_exists='replace')
 
-    logger.info('Cleaned data saved to database {}'.format(file_name))
+    logger.info('Cleaned data saved to database {}'.format(database_filename))
 
 
-def main(param=sys.argv):
+def main():
     """ main routine """
-
-    # print(param)
 
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
 
         print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
-              .format(messages_filepath, categories_filepath))
+              .format(config.path_messages, config.path_categories))
 
-        df_messages, df_categories = load_data(messages_filepath, categories_filepath)
+        df_messages, df_categories = load_data(config.path_messages, config.path_categories)
 
         print('Cleaning data...')
         df = clean_data(df_messages, df_categories)
 
-        print('Saving data...\n    DATABASE: {}'.format(database_filepath))
-        save_data(df, database_filepath)
+        print('Saving data...\n    DATABASE: {}'.format(config.path_database))
+        save_data(df, config.path_database)
 
         print('Cleaned data saved to database!')
 
     else:
-        print('Please provide the filepaths of the messages and categories '\
-              'datasets as the first and second argument respectively, as '\
-              'well as the filepath of the database to save the cleaned data '\
-              'to as the third argument. \n\nExample: python process_data.py '\
-              'disaster_messages.csv disaster_categories.csv '\
+        print('Please provide the filepaths of the messages and categories ' \
+              'datasets as the first and second argument respectively, as ' \
+              'well as the filepath of the database to save the cleaned data ' \
+              'to as the third argument. \n\nExample: python process_data.py ' \
+              'disaster_messages.csv disaster_categories.csv ' \
               'DisasterResponse.db')
 
 
 if __name__ == '__main__':
-
-
     main()

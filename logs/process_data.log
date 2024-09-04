@@ -1,0 +1,13 @@
+2024-09-03 19:23:07 INFO     Loading data...
+    MESSAGES: data/raw/disaster_messages.csv
+    CATEGORIES: data/raw/disaster_categories.csv
+2024-09-03 19:23:07 INFO     File data/raw/disaster_messages.csv loaded with shape (26248, 4)
+2024-09-03 19:23:07 INFO     File data/raw/disaster_categories.csv loaded with shape (26248, 2)
+2024-09-03 19:23:07 INFO     Cleaning data...
+2024-09-03 19:23:08 INFO     36 categories present in raw csv file
+2024-09-03 19:23:08 INFO     Data cleaning completed with shape (26179, 37)
+2024-09-03 19:23:08 INFO     Loading data...
+    MESSAGES: data/raw/disaster_messages.csv
+    CATEGORIES: data/raw/disaster_categories.csv
+2024-09-03 19:23:08 INFO     File data/raw/disaster_messages.csv loaded with shape (26248, 4)
+2024-09-03 19:23:08 INFO     File data/raw/disaster_categories.csv loaded with shape (26248, 2)

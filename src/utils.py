@@ -1,172 +1,22 @@
+import nltk
+nltk.download(['punkt', 'wordnet', 'stopwords'])
+
 import os
 import pandas as pd
 from sklearn.metrics import classification_report, roc_auc_score
 from sklearn.model_selection import GridSearchCV
-from src.config import *
+from src import config
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from iterstrat.ml_stratifiers import MultilabelStratifiedKFold
 
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+from nltk.corpus import wordnet
+import re
 
-# def make_train_csv(X, y, sagemaker_session, bucket, prefix=prefix, local_path=path_train,
-#                    filename=filename_train_csv):
-#     """
-#     Merges features and labels and converts them into one csv file with labels in the first column.
-#
-#     File is saved locally and then uploaded to s3. AWS requires no column headings or indexes to be present
-#
-#     Args:
-#         X: data features
-#         y: data labels
-#         prefix: default S3 sub folder for this project
-#         local_path: directory where training and validation files will be saved in s3
-#         filename: name of csv file, ex. 'train.csv'
-#         sagemaker_session: sagemaker session
-#         bucket: default bucket assigned to sagemaker session
-#
-#     Returns: S3 file path where data is stored
-#
-#     """
-#
-#     # make data dir, if it does not exist
-#     if not os.path.exists(local_path):
-#         os.makedirs(local_path)
-#
-#     # timestamp = strftime("%Y-%m-%d-%H-%M-%S", gmtime())
-#     full_local_filename = os.path.join(local_path, filename)
-#
-#     print('Local path: {} with shape {}'.format(full_local_filename, X.shape))
-#
-#     # save file locally
-#     df = pd.concat([pd.DataFrame(y), pd.DataFrame(X)], axis=1)
-#     df.to_csv(full_local_filename, header=False, index=False)
-#
-#     # will save also the column features an index still ?
-#     # df.to_parquet(full_local_filename)
-#
-#     # copy local file to S3
-#     # s3_path = os.path.join(prefix, local_path)
-#     # s3_full_path = sagemaker_session.upload_data(path=full_local_filename, bucket=bucket, key_prefix=s3_path)
-#
-#     # print('File created: {}'.format(s3_full_path))
-#
-#     # return s3_full_path, df
-#     return df
-
-
-# def fpreproc(dtrain, dtest, param):
-#     """
-#     Preprocessing function used in xgb.cv method
-#
-#     Recalculate scale_pos_weight for each cross validated sample
-#     """
-#
-#     label = dtrain.get_label()
-#     ratio = float(np.sum(label == 0)) / np.sum(label == 1)
-#     param["scale_pos_weight"] = ratio
-#     return (dtrain, dtest, param)
-
-
-# def make_test_csv(X, prefix, local_path, filename, sagemaker_session, bucket):
-#     """
-#     Saves features to local csv file and upload to S3.
-#
-#     AWS required that abel column are not present in this file, no column headings or indexes should be present
-#
-#     Args:
-#         x: data features
-#         prefix: default S3 sub folder for this project
-#         local_path: directory where training and validation files will be saved in s3
-#         filename: name of csv file, ex. 'train.csv'
-#         sagemaker_session: sagemaker session
-#         bucket: default bucket assigned to sagemaker session
-#
-#     Returns: S3 file path where data is stored
-#
-#     """
-#
-#     # make data dir, if it does not exist
-#     if not os.path.exists(local_path):
-#         os.makedirs(local_path)
-#
-#     full_local_filename = os.path.join(local_path, filename)
-#     print('Local path: {} with shape {}'.format(full_local_filename, X.shape))
-#
-#     # save file locally
-#     pd.DataFrame(X).to_csv(full_local_filename, header=False, index=False)
-#     #     pd.DataFrame(x).to_parquet(full_local_filename)
-#
-#     # copy local file to S3
-#     # s3_path = os.path.join(prefix, local_path)
-#     # s3_full_path = sagemaker_session.upload_data(path=full_local_filename, bucket=bucket, key_prefix=s3_path)
-#
-#     # print('File created: {}'.format(s3_full_path))
-#
-#     # return s3_full_path
-
-
-# def create_feature_map(features):
-#     # https://www.kaggle.com/cast42/xgboost-in-python-with-rmspe-v2
-#     outfile = open(filename_model_featuremap, 'w')
-#     for i, feat in enumerate(features):
-#         outfile.write('{0}\t{1}\tq\n'.format(i, feat))
-#     outfile.close()
-
-
-# def train_predict(learner, X_train, y_train, X_test, y_test):
-#     """
-#     train variance learners to compare performance on accuracy and auc
-#
-#     args:
-#        - learner: the learning algorithm to be trained and predicted on
-#        - X_train: features training set
-#        - y_train: income training set
-#        - X_test: features testing set
-#        - y_test: income testing set
-#     """
-#
-#     print('Start of training: {}'.format(learner.__class__.__name__))
-#
-#     results = {}
-#
-# #   Fit the learner to the training data using slicing with 'sample_size' using .fit(training_features[:], training_labels[:])
-#     start = time.time() # Get start time
-#     learner = learner.fit(X_train, y_train)
-#     end = time.time() # Get end time
-#
-#     # Calculate the training time
-#     results['train_time'] = end - start
-#
-#     # Get the predictions
-#     start = time.time() # Get start time
-#     predictions_test_proba = learner.predict_proba(X_test)[:, -1]
-#     predictions_train_proba = learner.predict_proba(X_train)[:,-1]
-#     end = time.time() # Get end time
-#
-#     predictions_test = [round(num) for num in predictions_test_proba.squeeze()]
-#     predictions_train = [round(num) for num in predictions_train_proba.squeeze()]
-#
-#     # Calculate the total prediction time
-#     results['pred_time'] = end - start
-#
-#     # Compute accuracy on the training samples
-#     results['acc_train'] = accuracy_score(predictions_train, y_train)
-#
-#     # Compute accuracy on test set
-#     results['acc_test'] = accuracy_score(predictions_test, y_test)
-#
-#     # Compute AUC on training set
-#     results['auc_train'] = roc_auc_score(y_train, predictions_train_proba, )
-#
-#     # Compute AUC on testing set
-#     results['auc_test'] = roc_auc_score(y_test, predictions_test_proba)
-#
-#     # Success
-#     print("{} training completed".format(learner.__class__.__name__))
-#
-#     # Return the results
-#     return results
 
 def evaluate(X, y, model, zero_division=0):
     """Generate model prediction and print model results"""
@@ -240,124 +90,6 @@ def cv_plot_scores(cv):
         ax1.set_title('Compare train and validation scores {}'.format(param))
 
     plt.tight_layout()
-
-
-# def get_tail_label(y: pd.DataFrame) -> list:
-#     """
-#     Find the underrepresented targets.
-#     Underrepresented targets are those which are observed less than the median occurrence.
-#     """
-#     # irlbl = y.sum(axis=0)
-#     # irlbl = irlbl.max() / irlbl
-#     # threshold_irlbl = irlbl.mean()
-#     # tail_label = irlbl[irlbl > threshold_irlbl].index.tolist()
-#     # print(tail_label)
-#     # return tail_label
-#
-#     # irlbl = y.sum(axis=0)
-#     # print(irlbl)
-#     # irlbl = irlbl.max() / irlbl
-#     # threshold_irlbl = irlbl.mean()
-#     # tail_label = irlbl[irlbl > threshold_irlbl].index.tolist()
-#     # print(tail_label)
-#
-#     grand_total = y.sum(axis=0).sum()
-#     irlbl = y.sum(axis=0) / grand_total
-#     # threshold_irlbl = irlbl.median()
-#     threshold_irlbl = irlbl.quantile(0.25)
-#     tail_label = irlbl[irlbl < threshold_irlbl].index.tolist()
-#
-#     return tail_label
-
-
-# def get_minority_samples(X: pd.DataFrame, y: pd.DataFrame):
-#     """
-#     Filter datasets containing records with imbalanced targets
-#
-#     Args:
-#         X: data features
-#         y: data labels
-#
-#     Returns:
-#         X_sub: pandas.DataFrame, the feature vector minority dataframe
-#         y_sub: pandas.DataFrame, the target vector minority dataframe
-#
-#     """
-#     tail_labels = get_tail_label(y)
-#     index = y[y[tail_labels].apply(lambda x: (x == 1).any(), axis=1)].index.tolist()
-#     X_sub = X.loc[index]
-#     y_sub = y.loc[index]
-#     print('Imbalanced labels: {}'.format(tail_labels))
-#     return X_sub, y_sub, tail_labels
-
-
-# def get_sample_ratio(df: pd.DataFrame):
-#     """
-#     Find the underrepresented targets.
-#     Underrepresented targets are those which are observed less than the median occurrence.
-#     Targets beyond a quantile limit are filtered.
-#     Targets which are not under represented are updated with a factor 1, means such rows will not be duplicated
-#     Targets which are under represented are updated with factor total mean / target count
-#
-#     Example
-#     'shops' will have factor 20
-#     'related' with have factor 1
-#
-#      Args:
-#         df: data labels
-#
-#     Returns:
-#         ratio: Series with label as index, with a ratio/weight column
-#
-#     """
-#
-#     tail_labels = get_tail_label(df)
-#     full_count = df.sum(axis=0)
-#     # print(full_count)
-#     ratio = np.where(full_count.index.isin(tail_labels), np.ceil((full_count.mean()) / full_count), 1)
-#     ratio = pd.Series(ratio, index=full_count.index)
-#     return ratio
-
-
-# def minority_oversampling(X, y):
-#     # calculate the ratio each label should be duplicated to be balanced
-#     counts = get_sample_ratio(y)
-#
-#     # filter datasets with rows that contain imbalanced features
-#     X_sub, y_sub, tail_labels = get_minority_samples(X, y)
-#     print('Minority samples: {} {}'.format(X_sub.shape, y_sub.shape))
-#
-#     # replace class binary indicator with it's ratio of duplication
-#     y_sub_copy = y_sub.copy()
-#     labels = y_sub.columns.to_list()
-#     for label in labels:
-#         # print(label, counts[label])
-#         y_sub_copy[label] = y_sub_copy[label].apply(lambda x: x * counts[label])
-#
-#     X_list = []
-#     y_list = []
-#     sample_weight = {}
-#
-#     for i in range(y_sub.shape[0]):
-#         # for each row, get label with maximum ratio
-#         max_label = y_sub_copy.iloc[i].idxmax()
-#         # how many times should we copy this row ?
-#         nr_copies = int(counts[max_label])
-#         # get index of row to be copied
-#         index = y_sub.iloc[i].name
-#         # print(i, max_label, nr_copies, index)
-#         # duplicate the rows according to ratio of imbalance
-#         for _ in range(nr_copies):
-#             y_list.append(y_sub.iloc[i])
-#             X_list.append(X_sub.iloc[i])
-#
-#     X_sub_new = pd.DataFrame(X_list, columns=X.columns.to_list())
-#     y_sub_new = pd.DataFrame(y_list, columns=y.columns.to_list())
-#
-#     X_sub_new = pd.concat([X, X_sub_new])
-#     y_sub_new = pd.concat([y, y_sub_new])
-#
-#     return X_sub_new, y_sub_new, tail_labels
 
 
 def calculate_sample_weights(label_ratio, y, power=1):
@@ -452,6 +184,8 @@ def cv_predefined(X_train, y_train, X_val, y_val, pipeline, hyperparameters, lab
 
 
 def custom_test_train_split(X, y, random_state=0, embedding=False):
+    """ Split data into train, validation and test dataset whilst using stratification """
+
     # The size of the test set will be 1/K (i.e. 1/n_splits), so you can tune that parameter to control the test size (e.g. n_splits=3 will have test split of size 1/3 = 33% of your data)
 
     # if embedding:
@@ -484,6 +218,7 @@ def custom_test_train_split(X, y, random_state=0, embedding=False):
 
 
 def plot_scores(score1, score2, score3, score1_name, score2_name, score3_name):
+    """ Compare scores from up to 3 models by category in a bar chart """
     if score1:
         plot1 = pd.DataFrame.from_dict(score1, orient='index', dtype='float16')
         plot1['param'] = score1_name
@@ -507,7 +242,151 @@ def plot_scores(score1, score2, score3, score1_name, score2_name, score3_name):
     plt.xticks(rotation=90, fontsize=14)
     plt.yticks(fontsize=14)
     plt.xlabel('Categories', fontsize=18)
-    plt.ylabel('Score', fontsize=18)
-    plt.title('Precision - Compare grid search for {}, {}, {}'.format(score1_name, score2_name, score3_name),
+    plt.ylabel('Precision score', fontsize=18)
+    plt.title('Compare grid search for {}, {}, {}'.format(score1_name, score2_name, score3_name),
               fontsize=18)
     plt.tight_layout()
+
+
+def plot_label_proportions(y, y_train, y_test):
+    """ plot class proportions to analyse imbalances """
+    y_train_prop = (y_train.sum() / y_train.shape[0]).sort_values().to_frame()
+    y_train_prop.columns = ['train_proportion']
+    y_test_prop = (y_test.sum() / y_test.shape[0]).sort_values().to_frame()
+    y_test_prop.columns = ['test_proportion']
+    y_prop = (y.sum() / y.shape[0]).sort_values().to_frame()
+    y_prop.columns = ['before_proportion']
+    all = y_train_prop.merge(y_test_prop, left_index=True, right_index=True)
+    all = all.merge(y_prop, left_index=True, right_index=True)
+    all = all.reindex(y_prop.index)
+    all.plot(kind='bar', width=0.6, sharey=True, sharex=True, stacked=False, figsize=(16, 6))
+    plt.tight_layout()
+
+
+def tokenize(text):
+    """ Summarize text into words
+
+    Most important functions:
+    - Summarize url links starting with http or www to a common phrase 'url
+    - Summarize email addresses to a common phrase 'email'
+    - Get rid of new lines `\n'
+    - Remove all words that are just numbers
+    - Remove all words that contains numbers
+    - Cleanup basic punctuation like '..', '. .'
+    - Remove punctuation
+    - Remove words that are just 1 character long after removing punctuation
+    - Use lemmatization to bring words to the base
+
+    Args:
+        text -> string: Text sentences to be split into words
+
+    Return:
+        clean_tokens -> list: List containing most crutial words
+    """
+
+    # Replace urls starting with 'https' with placeholder
+    url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    # replace urls with a common keyword
+    detected_urls = re.findall(url_regex, text)
+    for url in detected_urls:
+        text = text.replace(url, 'url')
+
+    # Replace urls starting with 'www' with placeholder
+    url_regex = 'www.(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    detected_urls = re.findall(url_regex, text)
+    for url in detected_urls:
+        text = text.replace(url, 'url')
+
+        # replace emails with placeholder
+    email_regex = '([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})'
+    detected_emails = re.findall(email_regex, text)
+    for email in detected_emails:
+        text = text.replace(email, 'email')
+
+        # replace newlines, which can negatively affect performance.
+    text = text.replace("\n", " ")
+    text = text.replace("..", ".")
+    text = text.replace(". .", ".")
+    text = text.replace(" ,.", ".")
+
+    text = re.sub(r'\s+', ' ', text).strip()
+
+    # normalize text by removing punctuation, remove case and strip spaces
+    text = re.sub(r"[^a-zA-Z0-9]", " ", text)
+    text = text.lower().strip()
+
+    # remove numbers
+    text = re.sub(r'\d+', '', text)
+
+    #  split sentence into words
+    tokens = word_tokenize(text)
+
+    # Remove stopwords, e.g. the, a,
+    tokens = [w for w in tokens if w not in stopwords.words("english")]
+
+    # take words to their core, e.g. children to child, organizations to organization
+    lemmatizer = WordNetLemmatizer()
+    clean_tokens = []
+    for tok in tokens:
+        clean_tok = lemmatizer.lemmatize(tok, wordnet.VERB)
+        # ignore tokens that have only 1 character or contains numbers
+        if len(clean_tok) >= 2 & clean_tok.isalpha():
+            clean_tokens.append(clean_tok)
+
+    return clean_tokens
+
+
+def tokenizer_light(text):
+    """ Lighter version of tokenizer function to perform some light text cleaning prior using OPENAI for embeddings
+
+    It's expected that OPENAI are more context aware, this we should not remove punctuation, stopwords, lemmatize, etc.
+    Example there is a big difference between 'I want to help' and 'want help', is openai aware of this difference ?
+
+    Most important functions:
+    - Summarize url links starting with http or www to a common phrase 'url
+    - Summarize email addresses to a common phrase 'email'
+    - Get rid of new lines `\n'
+    - Remove all words that are just numbers
+    - Remove all words that contains numbers
+    - Cleanup basic punctuation like '..', '. .'
+    - Remove punctuation
+    - Remove words that are just 1 character long after removing punctuation
+    - Use lemmatization to bring words to the base
+
+    Args:
+        text -> string: Text sentences to be split into words
+
+    Return:
+        clean_tokens -> list: List containing most crutial words
+    """
+
+    # Replace urls starting with 'https' with placeholder
+    url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    # replace urls with a common keyword
+    detected_urls = re.findall(url_regex, text)
+    for url in detected_urls:
+        text = text.replace(url, 'url')
+
+    # Replace urls starting with 'www' with placeholder
+    url_regex = 'www.(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    detected_urls = re.findall(url_regex, text)
+    for url in detected_urls:
+        text = text.replace(url, 'url')
+
+        # replace emails with placeholder
+    email_regex = '([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})'
+    detected_emails = re.findall(email_regex, text)
+    for email in detected_emails:
+        text = text.replace(email, 'email')
+
+    # replace newlines, which can negatively affect performance.
+    text = text.replace("\n", " ")
+
+    # replace basic punctuation errors
+    text = text.replace("..", ".")
+    text = text.replace(". .", ".")
+    text = text.replace(" ,.", ".")
+
+    text = re.sub(r'\s+', ' ', text).strip()
+
+    return text

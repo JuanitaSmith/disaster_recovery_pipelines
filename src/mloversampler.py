@@ -130,4 +130,7 @@ class MLOverSampling:
         X_sub_new = pd.concat([X, X_sub_new])
         y_sub_new = pd.concat([y, y_sub_new])
 
+        X_sub_new = X_sub_new.astype(X.dtypes.to_dict())
+        y_sub_new = y_sub_new.astype(y.dtypes.to_dict())
+
         return X_sub_new, y_sub_new, self.tail_labels

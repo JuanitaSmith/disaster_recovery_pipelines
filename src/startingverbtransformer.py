@@ -1,4 +1,5 @@
 import nltk
+
 nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger'])
 
 import re
@@ -6,11 +7,10 @@ import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+
+
 # from nltk.corpus import stopwords
 # from nltk.corpus import wordnet
-
-
-
 
 
 # def _tokenize(text):
@@ -128,8 +128,6 @@ class StartingVerbExtractor(BaseEstimator, TransformerMixin):
                 if first_tag in ['VB', 'VBP', 'VBN', 'VBG'] or first_word == 'RT':
                     return True
         return False
-
-
 
     def fit(self, X, y=None):
         """ Given it is a transformer we can return the self """
