@@ -2,6 +2,7 @@
 
 import pandas as pd
 import numpy as np
+import nlpaug.augmenter.word as naw
 
 
 class MLOverSampling:
@@ -26,6 +27,7 @@ class MLOverSampling:
         self.default_ratio = default_ratio
         self.ratios = pd.Series()
         self.minority_samples = 0
+        self.aug = naw.SynonymAug(aug_src='wordnet', lang='eng')
 
     def get_tail_labels(self, y: pd.DataFrame):
         """
@@ -86,7 +88,7 @@ class MLOverSampling:
 
     def minority_oversampling(self, X, y):
         """
-        Duplicate each minority samples multiple times according to the label ratio
+        Duplicate minority samples multiple times, according to the label ratio
 
         Args:
             X: pd.DataFrame, data features
@@ -117,8 +119,9 @@ class MLOverSampling:
         for i in range(y_sub.shape[0]):
             # for each row, get label with maximum ratio
             max_label = y_sub_copy.iloc[i].idxmax()
-            # how many times should we copy this row ?
+            # how many times should we copy this row?
             nr_copies = int(self.ratios[max_label])
+
             # duplicate the rows according to ratio of imbalance
             for _ in range(nr_copies):
                 y_list.append(y_sub.iloc[i])
@@ -129,6 +132,65 @@ class MLOverSampling:
 
         X_sub_new = pd.concat([X, X_sub_new])
         y_sub_new = pd.concat([y, y_sub_new])
+
+        X_sub_new = X_sub_new.astype(X.dtypes.to_dict())
+        y_sub_new = y_sub_new.astype(y.dtypes.to_dict())
+
+        return X_sub_new, y_sub_new, self.tail_labels
+
+    def augment_text(self, X, y):
+        """
+        Augment minority samples multiple times, according to the label ratio
+        Some words will be replaced with synonyms
+
+        Args:
+            X: pd.DataFrame, data features
+            y: pd.DataFrame, data labels
+
+        Returns:
+            X:sub_new: pd.DataFrame, enhanced feature dataset with minority classes duplicated
+            y_sub_new: pd.DataFrame, enhanced target dataset with minority classes duplicated
+            tail_labels: list, label names that are underrepresented (mean are in the 0.25 percentile)
+        """
+
+        # calculate the ratio each label should be duplicated to be balanced
+        self.get_sample_ratio(y)
+
+        # filter datasets with rows that only contain imbalanced features set to 1
+        X_sub, y_sub = self._get_minority_samples(X, y)
+        print('Minority samples: {} {}'.format(X_sub.shape, y_sub.shape))
+
+        # replace class binary indicator with its ratio/weight of duplication
+        y_sub_copy = y_sub.copy()
+        labels = y_sub.columns.to_list()
+        for label in labels:
+            y_sub_copy[label] = y_sub_copy[label].apply(lambda x: x * self.ratios[label])
+
+        idx = []
+        new_text = []
+        genre = []
+
+        for i in range(y_sub.shape[0]):
+            # for each row, get label with maximum ratio
+            max_label = y_sub_copy.iloc[i].idxmax()
+            # how many times should we copy this row?
+            nr_copies = int(self.ratios[max_label])
+
+            for index, row in X_sub.iloc[[i]].iterrows():
+                augmented_texts = self.aug.augment(row.message, n=nr_copies)
+                augmented_texts = [x.replace(" ' ", "'") for x in augmented_texts]
+                for text in augmented_texts:
+                    new_text.append(text)
+                    idx.append(index)
+                    genre.append(row.genre)
+
+        X_augmented = pd.DataFrame(
+            {'message': new_text, 'genre': genre}, index=idx)
+
+        y_augmented = y.loc[idx]
+
+        X_sub_new = pd.concat([X, X_augmented])
+        y_sub_new = pd.concat([y, y_augmented])
 
         X_sub_new = X_sub_new.astype(X.dtypes.to_dict())
         y_sub_new = y_sub_new.astype(y.dtypes.to_dict())

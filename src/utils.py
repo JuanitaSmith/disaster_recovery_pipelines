@@ -1,11 +1,11 @@
+""" helper functions to support ML pipeline """
+
 import nltk
 nltk.download(['punkt', 'wordnet', 'stopwords'])
 
-import os
 import pandas as pd
-from sklearn.metrics import classification_report, roc_auc_score
+from sklearn.metrics import classification_report, precision_score, roc_auc_score, accuracy_score
 from sklearn.model_selection import GridSearchCV
-from src import config
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
@@ -16,6 +16,11 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.corpus import wordnet
 import re
+from sklearn.feature_extraction.text import CountVectorizer
+from xgboost import plot_tree
+from src import config
+
+from wordcloud import WordCloud
 
 
 def evaluate(X, y, model, zero_division=0):
@@ -37,18 +42,18 @@ def evaluate(X, y, model, zero_division=0):
     return y_pred, score
 
 
-def print_results(y, y_pred, cv):
-    """Print best scores and parameters after cross validation training"""
+def print_results(y, y_pred):
+    """ Print scores after cross-validation training """
 
-    auc = roc_auc_score(y, y_pred)
-    print('AUC aggregate: {}'.format(auc))
-    return auc
-    # print('\nBest score: {}'.format(cv.best_score_))
-    # print("\nBest Parameters:", cv.best_params_)
+    roc_auc = roc_auc_score(y, y_pred)
+    acc = accuracy_score(y, y_pred)
+    print('ROC AUC: {}'.format(roc_auc))
+    print('Accuracy score: {}'.format(acc))
+    return roc_auc
 
 
 def print_cv_results(cv):
-    """ Print cross validation training results per fold"""
+    """ Print cross-validation training results per fold"""
 
     keys = []
     shapes = []
@@ -63,7 +68,7 @@ def print_cv_results(cv):
 
 
 def cv_plot_scores(cv):
-    """ Plot cross validation training vs testing scores for each fold"""
+    """ Plot cross validation training vs. testing scores for each fold"""
     nr_params = len(cv.best_params_)
     # print('Nr hyperparameters: {}'.format(nr_params))
     param_list = list(cv.best_params_.keys())
@@ -95,7 +100,7 @@ def cv_plot_scores(cv):
 def calculate_sample_weights(label_ratio, y, power=1):
     """ Calculate a single sample weight for each row summarizing all labels
 
-    Multi label sample weights are not supported in the current version
+    Multi-label sample weights are not supported in the current version
     As a workaround, calculate a sample weight per row across all labels
 
     Calculation: use the label with the maximum ratio in each row as the sample weight for the entire row
@@ -271,7 +276,7 @@ def tokenize(text):
     - Summarize email addresses to a common phrase 'email'
     - Get rid of new lines `\n'
     - Remove all words that are just numbers
-    - Remove all words that contains numbers
+    - Remove all words that contain numbers
     - Cleanup basic punctuation like '..', '. .'
     - Remove punctuation
     - Remove words that are just 1 character long after removing punctuation
@@ -321,7 +326,7 @@ def tokenize(text):
     #  split sentence into words
     tokens = word_tokenize(text)
 
-    # Remove stopwords, e.g. the, a,
+    # Remove stopwords, e.g. 'the', 'a',
     tokens = [w for w in tokens if w not in stopwords.words("english")]
 
     # take words to their core, e.g. children to child, organizations to organization
@@ -339,8 +344,8 @@ def tokenize(text):
 def tokenizer_light(text):
     """ Lighter version of tokenizer function to perform some light text cleaning prior using OPENAI for embeddings
 
-    It's expected that OPENAI are more context aware, this we should not remove punctuation, stopwords, lemmatize, etc.
-    Example there is a big difference between 'I want to help' and 'want help', is openai aware of this difference ?
+    It's expected that OPENAI are more context-aware, this we should not remove punctuation, stopwords, lemmatize, etc.
+    Example there is a big difference between 'I want to help' and 'want help', is openai aware of this difference?
 
     Most important functions:
     - Summarize url links starting with http or www to a common phrase 'url
@@ -390,3 +395,81 @@ def tokenizer_light(text):
     text = re.sub(r'\s+', ' ', text).strip()
 
     return text
+
+
+def word_cloud(counter, title=None, max_words=20):
+    """ Plot word cloud with 20 most used words as default """
+
+    f, ax = plt.subplots()
+    cloud = WordCloud(
+        background_color='white',
+        width=2500, height=1800, max_words=max_words,
+    ).generate_from_frequencies(frequencies=counter)
+    ax.imshow(cloud)
+    ax.axis('off')
+    plt.title(title, fontsize=30, backgroundcolor='silver')
+    plt.show()
+
+def cat_plot(categories, df):
+    """produces two wordcloud based on key phrases and
+    key adjectives extracted from each neighborhood description
+    inputs:
+        - neighborhood name (string)
+        - list of key phrases (list of strings)
+        - list of adjectives (list of strings)
+    outputs:
+        - two worldclouds
+    """
+
+    cv = CountVectorizer(tokenizer=tokenize,
+                         token_pattern=None,
+                         min_df=3,
+                         max_df=0.9,
+                         max_features=8000,
+                         ngram_range=(1, 3),
+                         )
+
+    for cat in categories:
+        df_cat = df[df[cat] == 1]
+
+        tokens = cv.fit_transform(df_cat['message'])
+
+        # get word headings
+        feature_names = cv.get_feature_names_out()
+
+        freq = pd.DataFrame(tokens.toarray().sum(axis=0))
+        freq.columns = ['count']
+        freq.index = feature_names
+        freq = freq.sort_values(by='count', ascending=False)
+
+        freq_dict = freq['count'].to_dict()
+        word_cloud(freq_dict, cat)
+
+
+def visualize_tree(xgb, bst, tree_to_plot=0):
+    """ Visualize tree for XGBoost model
+
+    # gain: the average gain across all splits the feature is used in.
+    # weight: the number of times a feature is used to split the data across all trees.
+    # cover: the average coverage across all splits the feature is used in.
+    # total_gain: the total gain across all splits the feature is used in.
+    # total_cover: the total coverage across all splits the feature is used in.
+    """
+
+    tree_to_plot = tree_to_plot
+    plot_tree(bst, fmap=config.filename_model_featuremap, num_trees=tree_to_plot, rankdir='LR')
+
+    fig = plt.gcf()
+
+    # Get current size
+    fig_size = fig.get_size_inches()
+
+    # Set zoom factor
+    sizefactor = 20
+
+    # Modify the current size by the factor
+    plt.gcf().set_size_inches(sizefactor * fig_size)
+
+    # The plots can be hard to read (known issue). So, separately save it to a PNG, which makes for easier viewing.
+    # fig.savefig('tree' + str(tree_to_plot)+'.png')
+    plt.show()

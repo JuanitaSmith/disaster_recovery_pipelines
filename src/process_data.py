@@ -4,7 +4,8 @@ import sys
 import pandas as pd
 from sqlalchemy import create_engine
 import logging
-import config
+from src import config
+
 # activate logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename=config.path_log_process_data,
@@ -29,6 +30,8 @@ def load_data(messages_filepath, categories_filepath):
 
     logger.info('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
                 .format(messages_filepath, categories_filepath))
+    print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
+          .format(messages_filepath, categories_filepath))
 
     # load csv files
     messages = pd.read_csv(messages_filepath)
@@ -70,7 +73,11 @@ def clean_categories(categories):
         # convert column from string to numeric
         categories[column] = pd.to_numeric(categories[column], downcast='integer')
 
-    logger.info('{} categories present in raw csv file'.format(categories.shape[1]))
+    # drop column child_alone as it has all values = 0
+    categories.drop('child_alone', inplace=True, axis=1)
+
+    logger.info('{} categories present after cleaning'.format(categories.shape[1]))
+    print('{} categories present after cleaning'.format(categories.shape[1]))
 
     return categories
 
@@ -88,12 +95,12 @@ def clean_data(messages, categories):
     """
 
     logger.info('Cleaning data...')
+    print('Cleaning data...')
 
-    # clean categories
+    # CLEAN CATEGORIES
     categories = clean_categories(categories)
 
-    # clean messages
-
+    # CLEAN MESSAGES
     # set id as index also in the messages dataset
     messages.set_index('id', inplace=True)
 
@@ -102,30 +109,21 @@ def clean_data(messages, categories):
 
     # drop duplicates
     df.drop_duplicates(inplace=True)
-    # assert (df.duplicated().sum()) == 0
 
     # drop records with duplicated indexes
     df = df[~df.index.duplicated(keep='first')]
-    # assert (df.index.duplicated().sum()) == 0
 
     # convert 'genre' to type 'category'
     df["genre"] = df["genre"].astype("category")
-    # assert df["genre"].dtype.name == 'category'
 
     # drop column 'original' as it contains over 50% missing values and are in foreign language
     df.drop('original', inplace=True, axis=1)
-    # make sure column original no longer exist
-    # assert sum(df.columns == 'original') == 0
-
-    # drop column child_alone as it has all values = 0
-    df.drop('child_alone', inplace=True, axis=1)
-    # assert sum(df.columns == 'child_alone') == 0
 
     # change 'related' column values with value '2' to '0'
     df['related'] = df['related'].where(df['related'].isin([0, 1]), other=0)
-    # assert len(df[df['related'] == 2]) == 0
 
     logger.info('Data cleaning completed with shape {}'.format(df.shape))
+    print('Data cleaning completed with shape {}'.format(df.shape))
 
     return df
 
@@ -142,9 +140,15 @@ def save_data(df, database_filename):
     logger.info('Saving data....')
 
     engine = create_engine(database_filename)
-    df.to_sql('messages', engine, index=True, if_exists='replace')
+    logger.info('DB engine: {}'.format(engine))
 
-    logger.info('Cleaned data saved to database {}'.format(database_filename))
+    try:
+        df.to_sql('messages', engine, index=True, if_exists='replace')
+        logger.info('Cleaned data saved to database {}'.format(database_filename))
+        print('Cleaned data saved to database {}'.format(database_filename))
+    except Exception as e:
+        logger.error('SQLite update failed with message {}'.format(e))
+        print('SQLite update failed with message {}'.format(e))
 
 
 def main():
@@ -154,18 +158,11 @@ def main():
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
 
-        print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
-              .format(config.path_messages, config.path_categories))
-
         df_messages, df_categories = load_data(config.path_messages, config.path_categories)
 
-        print('Cleaning data...')
         df = clean_data(df_messages, df_categories)
 
-        print('Saving data...\n    DATABASE: {}'.format(config.path_database))
         save_data(df, config.path_database)
-
-        print('Cleaned data saved to database!')
 
     else:
         print('Please provide the filepaths of the messages and categories ' \

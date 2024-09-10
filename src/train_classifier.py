@@ -1,8 +1,5 @@
 import sys
-from src import config
 from sqlalchemy import create_engine
-import pandas as pd
-import numpy as np
 from src.utils import *
 
 # save and load models

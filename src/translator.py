@@ -10,7 +10,7 @@ import pandas as pd
 from openai import OpenAI
 from sqlalchemy import create_engine
 
-import config
+from src import config
 
 # activate logging
 logger = logging.getLogger(__name__)
@@ -56,39 +56,45 @@ class OpenAITranslator:
         # self.model = 'gpt-4-turbo'
         self.model = 'gpt-4o'
         self.temperature = 0.1
-        self.translate = translation
 
-        # setup connection to OPENAI
-        # if openai_api_key is not None:
-        self.openai_api_key = openai_api_key
-        try:
-            # self.openai_api_key = os.environ.get('OPENAI_API_KEY')
-            self.client = OpenAI(api_key=self.openai_api_key)
-
-            # simple test to see if authentication is successful
-            response = (self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": self.system_prompt,
-                        "temperature": self.temperature,
-                        "response_format": {
-                            "type": "json_object"
-                        },
-                    },
-                    {
-                        "role": "user",
-                        "content": 'Vandaag is het zonnig'
-                    }
-                ],
-                temperature=self.temperature,
-            ))
-
-        except Exception as error:
-            print('Missing or incorrect OPENAI API key - {}'.format(error))
-            logger.error('Missing or incorrect OPENAI API key - {}'.format(error))
+        if translation in ['True', 'true', True]:
+            self.translate = True
+        elif translation in ['False', 'false', False]:
+            self.translate = False
+        else:
+            print('translation does not have values True or False - {}'.format(translation))
+            logger.error('translation does not have values True or False - {}'.format(translation))
             sys.exit(1)
+
+        # setup connection to OPENAI if translation is needed
+        if translation:
+            self.openai_api_key = openai_api_key
+            try:
+                # self.openai_api_key = os.environ.get('OPENAI_API_KEY')
+                self.client = OpenAI(api_key=self.openai_api_key)
+                # simple test to see if authentication is successful
+                response = (self.client.chat.completions.create(
+                    model=self.model,
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": self.system_prompt,
+                            "temperature": self.temperature,
+                            "response_format": {
+                                "type": "json_object"
+                            },
+                        },
+                        {
+                            "role": "user",
+                            "content": 'Vandaag is het zonnig'
+                        }
+                    ],
+                    temperature=self.temperature,
+                ))
+            except Exception as error:
+                print('Missing or incorrect OPENAI API key - {}'.format(error))
+                logger.error('Missing or incorrect OPENAI API key - {}'.format(error))
+                sys.exit(1)
 
         logger.info('OPENAI API connection established')
         print('OPENAI API connection established')
@@ -99,7 +105,6 @@ class OpenAITranslator:
         try:
             self.engine = create_engine(config.path_database)
             self.conn = self.engine.connect()
-
         except Exception as error:
             print('Missing or incorrect DATABASE at {} ({})'.format(config.path_database, error))
             logger.error('Missing or incorrect DATABASE at {} ({})'.format(config.path_database, error))
@@ -108,7 +113,7 @@ class OpenAITranslator:
         print('Database connection established ({}_'.format(config.path_database))
         logger.info('Database connection established ({}_'.format(config.path_database))
 
-    def _load_data(self):
+    def load_data(self):
         """ Load data to be translated here
 
         For my scenario, I load data from SQLITE database
@@ -135,9 +140,10 @@ class OpenAITranslator:
             sql_statement = 'select * from {}'.format(self.table_converted_messages)
             df_translations = pd.read_sql(sql=sql_statement, con=self.conn, index_col='id',
                                           dtype={'is_english': 'boolean'})
-        finally:
-            df_translations = pd.DataFrame()
-            pass
+        except Exception as info:
+            # df_translations = pd.DataFrame()
+            logger.error('No existing translations were found in database, even though it already exists')
+            sys.exit(1)
 
         print('Number of messages found {}'.format(df_messages.shape[0]))
         print('Number of messages already converted: {}'.format(df_translations.shape[0]))
@@ -342,7 +348,8 @@ class OpenAITranslator:
             try:
                 translation = dict_object['Translation']
             except Exception as info:
-                logger.info('index {} - could not be parsed ({}) - {}'.format(index, info, dict_object))
+                # if a message is already in english, the translation will not be supplied, it's not really an error
+                # logger.info('index {} - could not be parsed ({}) - {}'.format(index, info, dict_object))
                 pass
 
             isEnglishs[index] = isEnglish
@@ -443,7 +450,7 @@ class OpenAITranslator:
 
         print('Main routine triggered....')
 
-        df_messages, df_translations = self._load_data()
+        df_messages, df_translations = self.load_data()
 
         if self.translate:
             self._translate(df_messages, df_translations)
@@ -467,10 +474,6 @@ if __name__ == '__main__':
         if translate not in ['True', 'False']:
             print('\nPlease enter values True or False for the second parameter related to translation')
             sys.exit(1)
-        elif translate == 'True':
-            translate = True
-        elif translate == 'False':
-            translate = False
 
         trans = OpenAITranslator(openai_api_key=api_key,
                                  translation=translate,

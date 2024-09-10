@@ -12,9 +12,10 @@ The purpose of this project is to demonstrate the ability to create pipelines us
 ---
 
 Are you wondering if modern OpenAI embeddings can build better text classification models that older traditional libraries like scikit learn 
-CountVectorizer, TfidfTransformer that we learned in this course?
+CountVectorizer, TfidfTransformer that we learned in this Udacity course?
 
-I would expect that OPENAI embeddings are more context aware, and understand relationships between words, than simply doing word counts without context ?
+I would expect that OPENAI embeddings are more context-aware and understand relationships between words better, 
+than simply doing word counts without context?
 There should be a huge difference between **'I want to help'** and **'want help'**.
 
 Let's find out !!!
@@ -78,12 +79,14 @@ To clone the repository: https://github.com/JuanitaSmith/disaster_recovery_pipel
 
     - To run ETL pipeline that cleans data and stores in database
         `python src/process_data.py data/raw/disaster_messages.csv data/raw/disaster_categories.csv data/clean/DisasterResponse.db`
+        `python -m src.process_data data/raw/disaster_messages.csv data/raw/disaster_categories.csv data/clean/DisasterResponse.db`
+
     - Optional: To translate non-english texts to english using CHATGPT (not a project requirement)
       - To translate messages:
           `python src/translator.py ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■imPCP8F2 True 400`
-        - To only accummulate and save previous batch results:
+        - To only accumulate and save previous batch results:
             `python src/translator.py ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■imPCP8F2 False 0`
-            `python src/translator.py sk-proj-Niy0AyTYk1ICjnYOq2tWT3BlbkFJMmCr798Q3I5oimPCP8F2 True 400`
+            `python -m src.translator sk-proj-Niy0AyTYk1ICjnYOq2tWT3BlbkFJMmCr798Q3I5oimPCP8F2 True 400`
         - sys.argv = ['src/translator.py', 'sk-proj-Niy0AyTYk1ICjnYOq2tWT3BlbkFJMmCr798Q3I5oimPCP8F2', True, 400]
     - 
     - To run ML pipeline that trains classifier and saves
@@ -96,6 +99,8 @@ To clone the repository: https://github.com/JuanitaSmith/disaster_recovery_pipel
 
 4. To run unittests 
     `python -m unittest discover`
+    `python -m unittest tests.test_process_data_unittest`
+
 
 
 ## Language translator (optional step)

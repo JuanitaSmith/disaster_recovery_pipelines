@@ -1,5 +1,237 @@
-2024-09-03 15:54:43 INFO     HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2024-09-03 15:54:43 INFO     HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2024-09-03 15:54:44 INFO     HTTP Request: POST https://api.openai.com/v1/files "HTTP/1.1 200 OK"
-2024-09-03 15:54:45 INFO     HTTP Request: POST https://api.openai.com/v1/batches "HTTP/1.1 200 OK"
-2024-09-03 15:54:45 INFO     Batch submitted batch_9KmEZ7TTk0dUIORNsdQoI26d for records 0-400
+2024-09-04 15:41:15 INFO     HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-09-04 15:41:15 INFO     OPENAI API connection established
+2024-09-04 15:41:15 INFO     Database connection established (sqlite:////Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/clean/DisasterResponse.db_
+2024-09-04 15:41:15 INFO     Loading data...
+2024-09-04 15:41:15 INFO     Number of messages found 26179
+2024-09-04 15:41:15 INFO     Number of messages already converted: 17400
+2024-09-04 15:41:15 INFO     Translation started...
+2024-09-04 15:41:16 INFO     HTTP Request: POST https://api.openai.com/v1/files "HTTP/1.1 200 OK"
+2024-09-04 15:41:17 INFO     HTTP Request: POST https://api.openai.com/v1/batches "HTTP/1.1 200 OK"
+2024-09-04 15:41:17 INFO     Batch submitted batch_8ia7xiDe2i44IGNxas9mN4DM for records 0-400
+2024-09-04 15:46:17 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_8ia7xiDe2i44IGNxas9mN4DM "HTTP/1.1 200 OK"
+2024-09-04 15:46:17 INFO     Batch batch_8ia7xiDe2i44IGNxas9mN4DM" status completed
+2024-09-04 15:46:17 INFO     Batches successfully processed on OPENAI
+2024-09-04 15:46:17 INFO     Extracting batches into local json files...
+2024-09-04 15:46:18 INFO     HTTP Request: GET https://api.openai.com/v1/batches?limit=100 "HTTP/1.1 200 OK"
+2024-09-04 15:46:18 INFO     Batch id batch_8ia7xiDe2i44IGNxas9mN4DM, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_VHwxiMynkW46Egm59g8JIQfc, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_p2DLuS5uKh6BQxBEBskdDQEb, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_LlpEd0utraYayrtmuvfCOqvZ, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_HFjgaBPobSG3oxVZQvkcQDJo, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_8Vg8BEsadY4nmaZppllkffrF, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_9KmEZ7TTk0dUIORNsdQoI26d, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_lruWCxoOZFaPODmHrK49GNvV, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_uYn2OAjWahdndiMmdgRb8Rlz, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_flqNjEuIjFKEd9SUwmPzwlTo, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_eoRTRXDt0mheHpbWjeW8uQKE, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_ov3GATjBCu4T1IOk75zqN5AK, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_00nrAmQDdiwLujbhUDLh3Z1X, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_MXtwNlcS4bga5pp3BKXErCyx, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_0iP3N0CeNDnW4FmJ3mXTRLUc, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_zhOCvJWmcxs8WEbtc6zxXTli, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_4SBS9UWZAhESFSouylcAtfxt, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_OtRp27uyP9MESWJvACeHYRVa, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_Umpx2i1ksQbHNavqFBtQmGCw, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_m6YkBnqtIYz7Mh6McZhnuJpJ, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_eVRWQrUVnEaD28KPb9btFTkD, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_alRKHlkCdds2N7GzfJSuoz1u, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_pqs3fOnfysjliQbhDQ2T6o9S, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_ITarlL3pb1fuMJFzddzzR02W, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_JntVr1CgeaMRjaaBhuIqdGXg, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_eSn9U0RSXIYahCTNDM2mKgMn, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_adrxuVOGftTdD8VlRh4BFGdH, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_s6ZokCn8joWGjBeQ9EOpZEAV, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_BJCQviXg5kJruRizT2PGddsg, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_93FslaSsKwuLQ3FX2uwXEHdd, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_kNZ7UvqUFHiAsmn0V4VvVDlU, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_w1X5Fh6nYwsmayDXuF4piPkF, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_M9BDpbaETfirAieZCPVJFV1U, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_Imhp4fh818IA6KjL5qrwfKiY, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_2wmLLLqQ3nbO1ZMRAC6CwTUO, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_Y9hCYBUvywsgXQoXElUjDQdG, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_8VCSy1nlUHmindP0ckvPMoho, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_4YKT54RLg499gRNq1VpxSBo8, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_GPsZnrwAKDWoUjMGc2DSXXEJ, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_BjMJ9PULO5B0655woDVpFslG, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_iwqth7dekh1soFXPXnVA8CCb, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_uwBMs2PlUGnsrKxyFmj4AlEw, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_Kb2dneP8T29DCjmar5bmfNhn, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_RAkUvY7A7NrdPGm9vLJHOyNw, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_Iq8pgeY9m18NDwdhnNUAxpgM, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_TL3SgoBTml4UDQwGEUI97yFy, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_Rej5cNzg3s3FCtQflGaqKCmM, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_YUOxLO01Ny4jzPPMx3Ein1xe, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_crNgtuzYlK5mg9uGEebAJmjW, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_zCZ4m0VAz84739yYtGfFqzXJ, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_ArS1VoOwV1mIc2HubhZcOr6S, Status: completed, Completed: 400, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_ka3NBYVcss7JKMnUgtZ4nPTe, Status: completed, Completed: 300, Failed: 0
+2024-09-04 15:46:18 INFO     Batch id batch_rSDdkrv1MVxcidR8122xh7Bd, Status: completed, Completed: 300, Failed: 0
+2024-09-04 15:46:19 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_8ia7xiDe2i44IGNxas9mN4DM "HTTP/1.1 200 OK"
+2024-09-04 15:46:19 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-gnB9EyoyWtFExKWLWMqiGif7/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:19 INFO     Batch file batch_8ia7xiDe2i44IGNxas9mN4DM output successfully retrieved
+2024-09-04 15:46:20 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_VHwxiMynkW46Egm59g8JIQfc "HTTP/1.1 200 OK"
+2024-09-04 15:46:20 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-CUorqaTKZqKWCcuhB5DazgWe/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:20 INFO     Batch file batch_VHwxiMynkW46Egm59g8JIQfc output successfully retrieved
+2024-09-04 15:46:20 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_p2DLuS5uKh6BQxBEBskdDQEb "HTTP/1.1 200 OK"
+2024-09-04 15:46:21 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-3HcgnmgY5Ab2axztkvxkCl2n/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:21 INFO     Batch file batch_p2DLuS5uKh6BQxBEBskdDQEb output successfully retrieved
+2024-09-04 15:46:21 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_LlpEd0utraYayrtmuvfCOqvZ "HTTP/1.1 200 OK"
+2024-09-04 15:46:22 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-hmrr5CJW62TG88R0sHZX18F0/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:22 INFO     Batch file batch_LlpEd0utraYayrtmuvfCOqvZ output successfully retrieved
+2024-09-04 15:46:22 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_HFjgaBPobSG3oxVZQvkcQDJo "HTTP/1.1 200 OK"
+2024-09-04 15:46:23 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-qa619iq0LnJKTOpCQt0OdzNO/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:23 INFO     Batch file batch_HFjgaBPobSG3oxVZQvkcQDJo output successfully retrieved
+2024-09-04 15:46:23 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_8Vg8BEsadY4nmaZppllkffrF "HTTP/1.1 200 OK"
+2024-09-04 15:46:24 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-4xQbMbcrNfz5LB0xnzFSFCNF/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:24 INFO     Batch file batch_8Vg8BEsadY4nmaZppllkffrF output successfully retrieved
+2024-09-04 15:46:24 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_9KmEZ7TTk0dUIORNsdQoI26d "HTTP/1.1 200 OK"
+2024-09-04 15:46:25 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-k3ceUUvHbbIaxGN60UnnYw0y/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:25 INFO     Batch file batch_9KmEZ7TTk0dUIORNsdQoI26d output successfully retrieved
+2024-09-04 15:46:25 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_lruWCxoOZFaPODmHrK49GNvV "HTTP/1.1 200 OK"
+2024-09-04 15:46:26 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-acXkMmlkHOebZmFHaE5nyBlR/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:26 INFO     Batch file batch_lruWCxoOZFaPODmHrK49GNvV output successfully retrieved
+2024-09-04 15:46:26 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_uYn2OAjWahdndiMmdgRb8Rlz "HTTP/1.1 200 OK"
+2024-09-04 15:46:26 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-VvpZsUfaehshHJZNrP8I4RtQ/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:27 INFO     Batch file batch_uYn2OAjWahdndiMmdgRb8Rlz output successfully retrieved
+2024-09-04 15:46:27 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_flqNjEuIjFKEd9SUwmPzwlTo "HTTP/1.1 200 OK"
+2024-09-04 15:46:27 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-Qh4utpF05RpsRYXtwBfxLtSI/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:28 INFO     Batch file batch_flqNjEuIjFKEd9SUwmPzwlTo output successfully retrieved
+2024-09-04 15:46:28 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_eoRTRXDt0mheHpbWjeW8uQKE "HTTP/1.1 200 OK"
+2024-09-04 15:46:28 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-kmFyvNFUa0Wlefk0I33A3G72/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:29 INFO     Batch file batch_eoRTRXDt0mheHpbWjeW8uQKE output successfully retrieved
+2024-09-04 15:46:29 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_ov3GATjBCu4T1IOk75zqN5AK "HTTP/1.1 200 OK"
+2024-09-04 15:46:29 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-m7tY3PDWfaqRZXgofiAcLC5V/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:30 INFO     Batch file batch_ov3GATjBCu4T1IOk75zqN5AK output successfully retrieved
+2024-09-04 15:46:30 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_00nrAmQDdiwLujbhUDLh3Z1X "HTTP/1.1 200 OK"
+2024-09-04 15:46:30 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-L3q8ghHYZsZtMBsgYplqVUZ4/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:31 INFO     Batch file batch_00nrAmQDdiwLujbhUDLh3Z1X output successfully retrieved
+2024-09-04 15:46:31 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_MXtwNlcS4bga5pp3BKXErCyx "HTTP/1.1 200 OK"
+2024-09-04 15:46:31 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-R6mW4uYmKFquR2MzoQlm5LS1/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:32 INFO     Batch file batch_MXtwNlcS4bga5pp3BKXErCyx output successfully retrieved
+2024-09-04 15:46:32 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_0iP3N0CeNDnW4FmJ3mXTRLUc "HTTP/1.1 200 OK"
+2024-09-04 15:46:32 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-s9u4lprEexrPb0AIt60DkgAf/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:33 INFO     Batch file batch_0iP3N0CeNDnW4FmJ3mXTRLUc output successfully retrieved
+2024-09-04 15:46:33 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_zhOCvJWmcxs8WEbtc6zxXTli "HTTP/1.1 200 OK"
+2024-09-04 15:46:33 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-z2EOGyDT8fdsNFNeupX1bu6V/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:34 INFO     Batch file batch_zhOCvJWmcxs8WEbtc6zxXTli output successfully retrieved
+2024-09-04 15:46:34 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_4SBS9UWZAhESFSouylcAtfxt "HTTP/1.1 200 OK"
+2024-09-04 15:46:34 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-VJlcI7dAuwzMogEVuxGZpopF/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:34 INFO     Batch file batch_4SBS9UWZAhESFSouylcAtfxt output successfully retrieved
+2024-09-04 15:46:35 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_OtRp27uyP9MESWJvACeHYRVa "HTTP/1.1 200 OK"
+2024-09-04 15:46:35 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-Yy4WmOon4oaOqcqV34MXpQhI/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:35 INFO     Batch file batch_OtRp27uyP9MESWJvACeHYRVa output successfully retrieved
+2024-09-04 15:46:35 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_Umpx2i1ksQbHNavqFBtQmGCw "HTTP/1.1 200 OK"
+2024-09-04 15:46:36 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-JA7yYNtDcFuaWYXM9o8o0hmD/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:36 INFO     Batch file batch_Umpx2i1ksQbHNavqFBtQmGCw output successfully retrieved
+2024-09-04 15:46:37 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_m6YkBnqtIYz7Mh6McZhnuJpJ "HTTP/1.1 200 OK"
+2024-09-04 15:46:37 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-9HhKc6IBM3XkabigIOumic3P/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:37 INFO     Batch file batch_m6YkBnqtIYz7Mh6McZhnuJpJ output successfully retrieved
+2024-09-04 15:46:37 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_eVRWQrUVnEaD28KPb9btFTkD "HTTP/1.1 200 OK"
+2024-09-04 15:46:38 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-5LXvGKykyGnehYmLAmQWONwD/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:38 INFO     Batch file batch_eVRWQrUVnEaD28KPb9btFTkD output successfully retrieved
+2024-09-04 15:46:39 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_alRKHlkCdds2N7GzfJSuoz1u "HTTP/1.1 200 OK"
+2024-09-04 15:46:39 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-0Og5lHn22SEPpgdihZVz1L1S/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:39 INFO     Batch file batch_alRKHlkCdds2N7GzfJSuoz1u output successfully retrieved
+2024-09-04 15:46:39 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_pqs3fOnfysjliQbhDQ2T6o9S "HTTP/1.1 200 OK"
+2024-09-04 15:46:40 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-Lf0FY1CV3dHlflAFRoNc8fsd/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:41 INFO     Batch file batch_pqs3fOnfysjliQbhDQ2T6o9S output successfully retrieved
+2024-09-04 15:46:41 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_ITarlL3pb1fuMJFzddzzR02W "HTTP/1.1 200 OK"
+2024-09-04 15:46:41 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-mHl8OxJlLqWQnHHe0gpHAjd9/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:42 INFO     Batch file batch_ITarlL3pb1fuMJFzddzzR02W output successfully retrieved
+2024-09-04 15:46:42 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_JntVr1CgeaMRjaaBhuIqdGXg "HTTP/1.1 200 OK"
+2024-09-04 15:46:42 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-hfFM06Jkf7xxgAszgqW460y6/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:43 INFO     Batch file batch_JntVr1CgeaMRjaaBhuIqdGXg output successfully retrieved
+2024-09-04 15:46:43 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_eSn9U0RSXIYahCTNDM2mKgMn "HTTP/1.1 200 OK"
+2024-09-04 15:46:46 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-pTbhGYPCny2ithJePEw2Eyrx/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:47 INFO     Batch file batch_eSn9U0RSXIYahCTNDM2mKgMn output successfully retrieved
+2024-09-04 15:46:47 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_adrxuVOGftTdD8VlRh4BFGdH "HTTP/1.1 200 OK"
+2024-09-04 15:46:47 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-I4nYRqx83mRo9TZpwIUASQFs/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:48 INFO     Batch file batch_adrxuVOGftTdD8VlRh4BFGdH output successfully retrieved
+2024-09-04 15:46:48 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_s6ZokCn8joWGjBeQ9EOpZEAV "HTTP/1.1 200 OK"
+2024-09-04 15:46:48 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-oA0amskcD4xpXsKiZjl2Wx1e/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:49 INFO     Batch file batch_s6ZokCn8joWGjBeQ9EOpZEAV output successfully retrieved
+2024-09-04 15:46:49 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_BJCQviXg5kJruRizT2PGddsg "HTTP/1.1 200 OK"
+2024-09-04 15:46:49 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-apNCeCj4ki7tHQYjbzX5IRtS/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:49 INFO     Batch file batch_BJCQviXg5kJruRizT2PGddsg output successfully retrieved
+2024-09-04 15:46:50 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_93FslaSsKwuLQ3FX2uwXEHdd "HTTP/1.1 200 OK"
+2024-09-04 15:46:51 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-0UKr0vadUMOiZUTpRKMhZOfZ/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:51 INFO     Batch file batch_93FslaSsKwuLQ3FX2uwXEHdd output successfully retrieved
+2024-09-04 15:46:51 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_kNZ7UvqUFHiAsmn0V4VvVDlU "HTTP/1.1 200 OK"
+2024-09-04 15:46:52 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-g9STRT3WroYxQV9c4zxvZoSn/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:52 INFO     Batch file batch_kNZ7UvqUFHiAsmn0V4VvVDlU output successfully retrieved
+2024-09-04 15:46:52 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_w1X5Fh6nYwsmayDXuF4piPkF "HTTP/1.1 200 OK"
+2024-09-04 15:46:53 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-5hPiQWIgeNgdjRvq5e2njB2g/content "HTTP/1.1 200 OK"
+2024-09-04 15:46:53 INFO     Batch file batch_w1X5Fh6nYwsmayDXuF4piPkF output successfully retrieved
+2024-09-04 15:46:53 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_M9BDpbaETfirAieZCPVJFV1U "HTTP/1.1 200 OK"
+2024-09-04 15:46:54 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-xePRJyWpKtklQ3nWpXpVzfl3/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:54 INFO     Batch file batch_M9BDpbaETfirAieZCPVJFV1U output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-xePRJyWpKtklQ3nWpXpVzfl3', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:54 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_Imhp4fh818IA6KjL5qrwfKiY "HTTP/1.1 200 OK"
+2024-09-04 15:46:54 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-y0MQdRxLhHwTrcl1QgeSM6IU/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:54 INFO     Batch file batch_Imhp4fh818IA6KjL5qrwfKiY output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-y0MQdRxLhHwTrcl1QgeSM6IU', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:54 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_2wmLLLqQ3nbO1ZMRAC6CwTUO "HTTP/1.1 200 OK"
+2024-09-04 15:46:55 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-tfw6mRJfLkm3pNgcTDlXVND8/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:55 INFO     Batch file batch_2wmLLLqQ3nbO1ZMRAC6CwTUO output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-tfw6mRJfLkm3pNgcTDlXVND8', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:55 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_Y9hCYBUvywsgXQoXElUjDQdG "HTTP/1.1 200 OK"
+2024-09-04 15:46:55 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-HDd5OZ6u93rKPLI2M4tL7H94/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:55 INFO     Batch file batch_Y9hCYBUvywsgXQoXElUjDQdG output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-HDd5OZ6u93rKPLI2M4tL7H94', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:55 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_8VCSy1nlUHmindP0ckvPMoho "HTTP/1.1 200 OK"
+2024-09-04 15:46:55 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-Gr7g0iIiueb4xKoEYnP2SFl0/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:55 INFO     Batch file batch_8VCSy1nlUHmindP0ckvPMoho output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-Gr7g0iIiueb4xKoEYnP2SFl0', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:56 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_4YKT54RLg499gRNq1VpxSBo8 "HTTP/1.1 200 OK"
+2024-09-04 15:46:56 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-h3nW6xurbbJvc3HB9sDH7xi0/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:56 INFO     Batch file batch_4YKT54RLg499gRNq1VpxSBo8 output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-h3nW6xurbbJvc3HB9sDH7xi0', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:56 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_GPsZnrwAKDWoUjMGc2DSXXEJ "HTTP/1.1 200 OK"
+2024-09-04 15:46:56 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-rxn0N1DFz0fJvOMvgMLoMbES/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:56 INFO     Batch file batch_GPsZnrwAKDWoUjMGc2DSXXEJ output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-rxn0N1DFz0fJvOMvgMLoMbES', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:56 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_BjMJ9PULO5B0655woDVpFslG "HTTP/1.1 200 OK"
+2024-09-04 15:46:57 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-6MMUZEXsziXV5atgVzqhlt2F/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:57 INFO     Batch file batch_BjMJ9PULO5B0655woDVpFslG output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-6MMUZEXsziXV5atgVzqhlt2F', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:57 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_iwqth7dekh1soFXPXnVA8CCb "HTTP/1.1 200 OK"
+2024-09-04 15:46:57 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-j32IYKTvkaXOyHTlP3tqLLIa/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:57 INFO     Batch file batch_iwqth7dekh1soFXPXnVA8CCb output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-j32IYKTvkaXOyHTlP3tqLLIa', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:57 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_uwBMs2PlUGnsrKxyFmj4AlEw "HTTP/1.1 200 OK"
+2024-09-04 15:46:58 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-whdYZie2n81J4yhHTjgpVSpz/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:58 INFO     Batch file batch_uwBMs2PlUGnsrKxyFmj4AlEw output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-whdYZie2n81J4yhHTjgpVSpz', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:58 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_Kb2dneP8T29DCjmar5bmfNhn "HTTP/1.1 200 OK"
+2024-09-04 15:46:58 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-VVVZ0CxzcaH9RzQlSr1vB2zK/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:58 INFO     Batch file batch_Kb2dneP8T29DCjmar5bmfNhn output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-VVVZ0CxzcaH9RzQlSr1vB2zK', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:58 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_RAkUvY7A7NrdPGm9vLJHOyNw "HTTP/1.1 200 OK"
+2024-09-04 15:46:58 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-rrzumwMz2xPQRHw3Sq0UQPgy/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:58 INFO     Batch file batch_RAkUvY7A7NrdPGm9vLJHOyNw output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-rrzumwMz2xPQRHw3Sq0UQPgy', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:58 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_Iq8pgeY9m18NDwdhnNUAxpgM "HTTP/1.1 200 OK"
+2024-09-04 15:46:59 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-qsXMeBaaX4jT2QsEyWvrnHJ6/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:59 INFO     Batch file batch_Iq8pgeY9m18NDwdhnNUAxpgM output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-qsXMeBaaX4jT2QsEyWvrnHJ6', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:59 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_TL3SgoBTml4UDQwGEUI97yFy "HTTP/1.1 200 OK"
+2024-09-04 15:46:59 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-YT9fXC8AJriJxFfP06rjBv8M/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:59 INFO     Batch file batch_TL3SgoBTml4UDQwGEUI97yFy output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-YT9fXC8AJriJxFfP06rjBv8M', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:46:59 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_Rej5cNzg3s3FCtQflGaqKCmM "HTTP/1.1 200 OK"
+2024-09-04 15:46:59 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-9SzphvWdRclVLFSIOIg98Yve/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:46:59 INFO     Batch file batch_Rej5cNzg3s3FCtQflGaqKCmM output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-9SzphvWdRclVLFSIOIg98Yve', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:47:00 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_YUOxLO01Ny4jzPPMx3Ein1xe "HTTP/1.1 200 OK"
+2024-09-04 15:47:00 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-k7UtTK8vDhHLG5dXahNQiVw8/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:47:00 INFO     Batch file batch_YUOxLO01Ny4jzPPMx3Ein1xe output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-k7UtTK8vDhHLG5dXahNQiVw8', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:47:00 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_crNgtuzYlK5mg9uGEebAJmjW "HTTP/1.1 200 OK"
+2024-09-04 15:47:00 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-QEThhcIfkPApHI4JTNmnAdSx/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:47:00 INFO     Batch file batch_crNgtuzYlK5mg9uGEebAJmjW output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-QEThhcIfkPApHI4JTNmnAdSx', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:47:00 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_zCZ4m0VAz84739yYtGfFqzXJ "HTTP/1.1 200 OK"
+2024-09-04 15:47:01 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-MhKACES9DAOFx8tmzxMQKhjC/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:47:01 INFO     Batch file batch_zCZ4m0VAz84739yYtGfFqzXJ output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-MhKACES9DAOFx8tmzxMQKhjC', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:47:01 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_ArS1VoOwV1mIc2HubhZcOr6S "HTTP/1.1 200 OK"
+2024-09-04 15:47:01 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-toG2pk3ITbjEUs6FFESTZwma/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:47:01 INFO     Batch file batch_ArS1VoOwV1mIc2HubhZcOr6S output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-toG2pk3ITbjEUs6FFESTZwma', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:47:01 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_ka3NBYVcss7JKMnUgtZ4nPTe "HTTP/1.1 200 OK"
+2024-09-04 15:47:01 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-lVFK2U1XlKy9FUEebgtLtsRy/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:47:01 INFO     Batch file batch_ka3NBYVcss7JKMnUgtZ4nPTe output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-lVFK2U1XlKy9FUEebgtLtsRy', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:47:02 INFO     HTTP Request: GET https://api.openai.com/v1/batches/batch_rSDdkrv1MVxcidR8122xh7Bd "HTTP/1.1 200 OK"
+2024-09-04 15:47:02 INFO     HTTP Request: GET https://api.openai.com/v1/files/file-GLfZAyCsJRJPPWdEZUKymg2I/content "HTTP/1.1 404 Not Found"
+2024-09-04 15:47:02 INFO     Batch file batch_rSDdkrv1MVxcidR8122xh7Bd output already deleted on openai - Error code: 404 - {'error': {'message': 'No such File object: file-GLfZAyCsJRJPPWdEZUKymg2I', 'type': 'invalid_request_error', 'param': 'id', 'code': None}}
+2024-09-04 15:47:02 INFO     Save translations into pandas dataframe ...
+2024-09-04 15:47:03 INFO     Number of translated messages found in json files before cleaning: 17800
+2024-09-04 15:47:04 INFO     Cleaning translations...
+2024-09-04 15:47:04 INFO     Non-English text without translations found and corrected: 4
+2024-09-04 15:47:04 INFO     17800 messages were checked and translated with OpenAI after cleaning
+2024-09-04 15:47:04 INFO     Messages not in English after cleaning: 341
+2024-09-04 15:47:04 INFO     Saving translations...
+2024-09-04 15:47:04 INFO     Updating messages dataset with translations...
+2024-09-04 15:47:04 INFO     Messages successfully updated with translated texts
+2024-09-04 15:47:04 INFO     Translation completed !!!
