@@ -34,6 +34,10 @@ import os
 # filename_validation_parquet = 'validation.parquet'
 # filename_test_parquet = 'test.parquet'
 
+# project_root = os.getcwd()
+project_root = os.path.dirname(os.path.abspath(__file__))
+print('Project root: {}'.format(project_root))
+
 # FOLDER NAMES
 folder_data = 'data'
 folder_raw = 'data/raw'
@@ -61,13 +65,15 @@ filename_translations_json_batchjob = 'batch_tasks_language_detection.jsonl'
 filename_translations_json_batchjob_results = 'batch_job_results.jsonl'
 
 # FILE PATHS
-path_log_process_data = os.path.join(folder_logs, filename_log_process_data)
-path_log_train_classifier = os.path.join(folder_logs, filename_log_train_classifier)
-path_log_translation = os.path.join(folder_logs, filename_translations_log)
-path_messages = os.path.join(folder_raw, filename_messages)
-path_categories = os.path.join(folder_raw, filename_categories)
-path_database = os.path.join(folder_db, folder_clean, filename_database)
-path_model = os.path.join(folder_models, filename_model)
-path_translations = os.path.join(folder_translations, filename_translations)
-path_translation_json_batchjob = os.path.join(folder_translations, filename_translations_json_batchjob)
-path_translation_json_batchjob_result = os.path.join(folder_translations, filename_translations_json_batchjob_results)
+path_log_process_data = os.path.join(project_root, folder_logs, filename_log_process_data)
+path_log_train_classifier = os.path.join(project_root, folder_logs, filename_log_train_classifier)
+path_log_translation = os.path.join(project_root, folder_logs, filename_translations_log)
+path_messages = os.path.join(project_root, folder_raw, filename_messages)
+path_categories = os.path.join(project_root, folder_raw, filename_categories)
+path_database = os.path.join(folder_db, '..', folder_clean, filename_database)
+path_model = os.path.join(project_root, folder_models, filename_model)
+path_translations = os.path.join(project_root, folder_translations, filename_translations)
+path_translation_json_batchjob = os.path.join(project_root, folder_translations, filename_translations_json_batchjob)
+path_translation_json_batchjob_result = os.path.join(project_root,
+                                                     folder_translations,
+                                                     filename_translations_json_batchjob_results)
