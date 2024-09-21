@@ -7,10 +7,15 @@ __pycache__
 data/train
 data/openai*
 cache
-test*
 /MLOverSampler/.pytest_cache/
 *.pytest_cache/
 /notebooks/Language transformer using openai- Single Batch.ipynb
 /notebooks/Bayes-Optimization-Demo.ipynb
 /notebooks/ML Pipeline Preparation copy with all experiments.ipynb
 /notebooks/multi_label_metrics.ipynb
+/notebooks/Focal-Loss-Function.ipynb
+/data/clean/DisasterResponseStudyOptuna.db
+tree*
+notebooks/ML Pipeline Preparation - copy with focal loss experiments.ipynb
+/data/clean/DisasterResponseStudyOptuna1.db
+/logs/train_classifier_best_results.log

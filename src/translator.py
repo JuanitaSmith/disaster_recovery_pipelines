@@ -100,8 +100,8 @@ class OpenAITranslator:
         print('OPENAI API connection established')
 
         # setup connection to SQLITE database
-        self.table_messages = 'messages'
-        self.table_converted_messages = 'message_language'
+        self.table_messages = config.table_messages
+        self.table_converted_messages = config.table_converted_messages
         try:
             self.engine = create_engine(config.path_database)
             self.conn = self.engine.connect()

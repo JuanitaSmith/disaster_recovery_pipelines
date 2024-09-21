@@ -1,10 +1,10 @@
-""" helper functions to support ML pipeline """
+""" helper functions to support ML pipeline training and visualization """
 
 import nltk
 nltk.download(['punkt', 'wordnet', 'stopwords'])
 
 import pandas as pd
-from sklearn.metrics import classification_report, precision_score, roc_auc_score, accuracy_score
+from sklearn.metrics import classification_report, roc_auc_score, accuracy_score
 from sklearn.model_selection import GridSearchCV
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -24,7 +24,21 @@ from wordcloud import WordCloud
 
 
 def evaluate(X, y, model, zero_division=0):
-    """Generate model prediction and print model results"""
+    """ Generate model prediction and print model results
+
+        Args:
+            X: pd.DataFrame, data features
+            y: pd.DataFrame, data labels
+            model: trained model
+            zero_division: {“warn”, 0.0, 1.0, np.nan}, default=”warn”
+                Sets the value to return when there is a zero division.
+                If set to “warn”, this acts as 0, but warnings are also raised.
+
+        Return:
+            y_pred: pd.DataFrame, model predictions
+            score: pd.DataFrame, precision/recall scores from function 'classification_report'
+
+    """
     y_pred = model.predict(X)
 
     score = classification_report(y,
@@ -43,17 +57,31 @@ def evaluate(X, y, model, zero_division=0):
 
 
 def print_results(y, y_pred):
-    """ Print scores after cross-validation training """
+    """ Print scores after fitting a model
+
+    Args:
+        y: pd.DataFrame, actual label values
+        y_pred: pd.DataFrame, predicted label values
+
+    Return:
+        roc_auc: pd.DataFrame, ROC AUC score
+    """
 
     roc_auc = roc_auc_score(y, y_pred)
-    acc = accuracy_score(y, y_pred)
+    # accuracy_score will only be considered as correct, when all 35 classes in a row are correct.
+    acc_global = accuracy_score(y, y_pred)
+
+    # custom accuracy score by class
+    acc = (y_pred == y).mean().mean()
+
     print('ROC AUC: {}'.format(roc_auc))
-    print('Accuracy score: {}'.format(acc))
+    print('Accuracy score (by class): {}'.format(acc))
+    print('Accuracy score overall: {}'.format(acc_global))
     return roc_auc
 
 
 def print_cv_results(cv):
-    """ Print cross-validation training results per fold"""
+    """ Print summary cross-validation training results per fold """
 
     keys = []
     shapes = []
@@ -69,6 +97,7 @@ def print_cv_results(cv):
 
 def cv_plot_scores(cv):
     """ Plot cross validation training vs. testing scores for each fold"""
+
     nr_params = len(cv.best_params_)
     # print('Nr hyperparameters: {}'.format(nr_params))
     param_list = list(cv.best_params_.keys())
@@ -100,33 +129,30 @@ def cv_plot_scores(cv):
 def calculate_sample_weights(label_ratio, y, power=1):
     """ Calculate a single sample weight for each row summarizing all labels
 
-    Multi-label sample weights are not supported in the current version
-    As a workaround, calculate a sample weight per row across all labels
+    Multi-label sample weights are not well-supported currently.
+    As a workaround, calculate a sample weight per row across all labels.
 
     Calculation: use the label with the maximum ratio in each row as the sample weight for the entire row
 
     Args:
-        label_ratio: ratio's per label indicating level of imbalance
-                     e.g. food with factor 20, related with factor 1
-        y: data multi labels
+        label_ratio: Series with index the label name, and value int with ratio.
+             Ratio per label indicating level of imbalance
+             e.g., label 'food' with factor 20, label 'related' with factor 1
+             (Custom class mloversampler.get_sample_ratio() was used in this project)
+        y: data multi-labels
         power: further inflate ratio (ratio ** power)
 
     Returns:
-        weights: dataframe, weight for each row in the target dataset
+        weights: pd.DataFrame, weight for each row in the target dataset
 
     """
 
-    # calculate the ratio of each label indicating level of imbalance
-    # counts = get_sample_ratio(y)
-
-    # replace class binary indicator with it's weight
+    # replace class binary indicator with its weight
     y_copy = y.copy()
-    max_ratios = {}
     weights = pd.DataFrame()
     labels = y.columns.to_list()
 
     for label in labels:
-        # print(label, counts[label])
         y_copy[label] = y_copy[label].apply(lambda x: x * label_ratio[label])
 
     # build a dataframe containing the max weight per row
@@ -147,7 +173,31 @@ def calculate_sample_weights(label_ratio, y, power=1):
 def cv_predefined(X_train, y_train, X_val, y_val, pipeline, hyperparameters, label_ratio=None,
                   scoring='roc_auc', verbose=3, error_score=np.nan, calc_sample_ratio=False,
                   random_state=0, nr_splits=3, nr_jobs=None):
-    """ Custom cross validation """
+    """ Custom cross validation
+
+    XGBOOST and SCKIT-LEARN together to not support training with train dataset, and validating with validation dataset.
+    Below function was experimenting with closing this gap, but was not used for this reason in the end.
+
+    Args:
+        X_train: pd.DataFrame, training data features
+        y_train: pd.DataFrame, training data labels
+        X_val: pd.DataFrame, validation data features
+        y_val: pd.DataFrame, validation data labels
+        pipeline: sklearn pipeline
+        hyperparameters: dict, pipeline hyperparameters
+        label_ratio: Series, label ratio (index label, value int ratio)
+        scoring: string, cross-validation scoring function
+        verbose: integer, verbosity level
+        error_score: string, cross-validation error score function
+        calc_sample_ratio: boolean, whether to calculate sample weights and use it during cross-validation
+        random_state: integer, random state seed
+        nr_splits: integer, number of cross-validation splits
+        nr_jobs: integer, number of jobs to run in parallel
+
+    Return:
+        gridsearch results: dict of numpy (masked) ndarrays
+        A dict with keys as column headers and values as columns, that can be imported into a pandas DataFrame.
+    """
 
     # Build a predefined split with validation set to be used for evaluation
 
@@ -188,25 +238,36 @@ def cv_predefined(X_train, y_train, X_val, y_val, pipeline, hyperparameters, lab
     return gridsearch
 
 
-def custom_test_train_split(X, y, random_state=0, embedding=False):
-    """ Split data into train, validation and test dataset whilst using stratification """
+def custom_test_val_train_split(X, y, random_state=0, test_split=6, val_split=5):
+    """ Split data into train, validation and test dataset whilst using MULTI-LABEL stratification
 
-    # The size of the test set will be 1/K (i.e. 1/n_splits), so you can tune that parameter to control the test size (e.g. n_splits=3 will have test split of size 1/3 = 33% of your data)
+    The size of the test set will be 1/K (i.e., 1/n_splits).
+    Tune this parameter to control the test size.
+    (e.g. n_splits=3 will have test split of size 1/3 = 33% of your data)
 
-    # if embedding:
-    #     X.embedding = list(X.embedding.values)
+    Args:
+        X: pd.DataFrame, training data features
+        y: pd.DataFrame, training data labels
+        random_state: integer, random state seed
+        test_split: integer, split size for test dataset
+        val_split: integer, split size for validation dataset
 
-    # STEP 1
-    # split data into training and testing dataset
-    mskf_1 = MultilabelStratifiedKFold(n_splits=6, shuffle=True, random_state=random_state)
+    Returns:
+        X_train: pd.DataFrame, training data features
+        y_train: pd.DataFrame, training data labels
+        X_val: pd.DataFrame, validation data features
+        y_val: pd.DataFrame, validation data labels
+        X_test: pd.DataFrame, test data features
+        y_test: pd.DataFrame, test data labels
+    """
 
-    for train_index, test_index in mskf_1.split(X, y):
-        X_train_val, y_train_val = X.iloc[train_index], y.iloc[train_index]
-        X_test, y_test = X.iloc[test_index], y.iloc[test_index]
+    # STEP 1 - split data into training and testing dataset
+    X_train_val, y_train_val, X_test, y_test = custom_test_train_split(X, y,
+                                                                       random_state=random_state,
+                                                                       test_split=test_split)
 
-    # STEP 2
-    # further split training dataset into train and validation datasets
-    mskf_2 = MultilabelStratifiedKFold(n_splits=5, shuffle=True, random_state=random_state)
+    # STEP 2 - further split training dataset into train and validation datasets
+    mskf_2 = MultilabelStratifiedKFold(n_splits=val_split, shuffle=True, random_state=random_state)
     for train_index, val_index in mskf_2.split(X_train_val, y_train_val):
         X_train, y_train = X_train_val.iloc[train_index], y_train_val.iloc[train_index]
         X_val, y_val = X_train_val.iloc[val_index], y_train_val.iloc[val_index]
@@ -222,8 +283,59 @@ def custom_test_train_split(X, y, random_state=0, embedding=False):
     return X_train, y_train, X_val, y_val, X_test, y_test
 
 
-def plot_scores(score1, score2, score3, score1_name, score2_name, score3_name):
-    """ Compare scores from up to 3 models by category in a bar chart """
+def custom_test_train_split(X, y, random_state=0, test_split=3, silent=True):
+    """ Split data into train and test dataset whilst using MULTI-LABEL stratification
+
+    The size of the test set will be 1/K (i.e., 1/n_splits).
+    Tune this parameter to control the test size.
+    (e.g. n_splits=3 will have test split of size 1/3 = 33% of your data)
+
+    Args:
+        X: pd.DataFrame, training data features
+        y: pd.DataFrame, training data labels
+        random_state: integer, random state seed
+        test_split: integer, split size for test dataset
+        silent: boolean, if False the splitting results will be printed
+
+    Returns:
+        X_train: pd.DataFrame, training data features
+        y_train: pd.DataFrame, training data labels
+        X_test: pd.DataFrame, test data features
+        y_test: pd.DataFrame, test data labels
+    """
+
+    # STEP 1 - split data into training and testing dataset
+    mskf_1 = MultilabelStratifiedKFold(n_splits=test_split, shuffle=True, random_state=random_state)
+
+    for train_index, test_index in mskf_1.split(X, y):
+        X_train, y_train = X.iloc[train_index], y.iloc[train_index]
+        X_test, y_test = X.iloc[test_index], y.iloc[test_index]
+
+    if not silent:
+        print(
+            'Total records: X{}:y{}\n'
+            'Train shape: X{}:y{}\n'
+            'Test shape: X{}:y{}'.format(
+                X.shape, y.shape, X_train.shape, y_train.shape, X_test.shape, y_test.shape))
+
+    return X_train, y_train, X_test, y_test
+
+
+def plot_scores(score1, score2, score3, score1_name, score2_name, score3_name, order=None):
+    """ Compare scores from up to 3 models by category in a bar chart
+
+    Scores objects are returned using [scikit-learn function 'classification_report']
+    (https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html)
+
+    Args:
+        score1: str or dict,ext summary of the precision, recall, F1 score for each class for model 1
+        score2: str or dict,ext summary of the precision, recall, F1 score for each class for model 2
+        score3: : str or dict,ext summary of the precision, recall, F1 score for each class for model 2
+        score1_name: str, description of model 1
+        score2_name: str, description of model 2
+        score3_name: str, description of model 3
+        order: list, order class labels should print in, eg in order of imbalance
+    """
     if score1:
         plot1 = pd.DataFrame.from_dict(score1, orient='index', dtype='float16')
         plot1['param'] = score1_name
@@ -242,7 +354,7 @@ def plot_scores(score1, score2, score3, score1_name, score2_name, score3_name):
 
     df_all = pd.concat([plot1, plot2, plot3])
     plt.figure(figsize=(30, 10))
-    sns.barplot(data=df_all, x=df_all.index, y='precision', hue='param', width=0.4, dodge=True)
+    sns.barplot(data=df_all, x=df_all.index, y='precision', hue='param', width=0.4, dodge=True, order=order)
     plt.axhline(0.7)
     plt.xticks(rotation=90, fontsize=14)
     plt.yticks(fontsize=14)
@@ -254,17 +366,31 @@ def plot_scores(score1, score2, score3, score1_name, score2_name, score3_name):
 
 
 def plot_label_proportions(y, y_train, y_test):
-    """ plot class proportions to analyse imbalances """
+    """ Plot class proportions in a bar chart to analyze multi-label class imbalances
+
+    The plot attempts to answer the following questions:
+    Does the original, train and test datasets have the same proportions of each class present?
+    Did the multi-label stratification split work?
+
+    Args:
+        y: pd.DataFrame, full dataset with multi-label labels
+        y_train: pd.DataFrame, training dataset after splitting of y -
+        y_test: pd.DataFrame, test dataset after splitting of y
+
+    """
     y_train_prop = (y_train.sum() / y_train.shape[0]).sort_values().to_frame()
-    y_train_prop.columns = ['train_proportion']
+    y_train_prop.columns = ['train']
     y_test_prop = (y_test.sum() / y_test.shape[0]).sort_values().to_frame()
-    y_test_prop.columns = ['test_proportion']
+    y_test_prop.columns = ['test']
     y_prop = (y.sum() / y.shape[0]).sort_values().to_frame()
-    y_prop.columns = ['before_proportion']
-    all = y_train_prop.merge(y_test_prop, left_index=True, right_index=True)
-    all = all.merge(y_prop, left_index=True, right_index=True)
-    all = all.reindex(y_prop.index)
-    all.plot(kind='bar', width=0.6, sharey=True, sharex=True, stacked=False, figsize=(16, 6))
+    y_prop.columns = ['original']
+    all_data = y_train_prop.merge(y_test_prop, left_index=True, right_index=True)
+    all_data = all_data.merge(y_prop, left_index=True, right_index=True)
+    all_data = all_data.reindex(y_prop.index)
+    all_data.plot(kind='bar', width=0.6, sharey=True, sharex=True, stacked=False, figsize=(16, 6))
+    plt.ylabel('% proportion')
+    plt.xlabel('Categories')
+    plt.title('Compare proportions of original, train vs test datasets by category')
     plt.tight_layout()
 
 
@@ -283,10 +409,10 @@ def tokenize(text):
     - Use lemmatization to bring words to the base
 
     Args:
-        text -> string: Text sentences to be split into words
+        text: string, Text sentences to be split into words
 
     Return:
-        clean_tokens -> list: List containing most crutial words
+        clean_tokens: list, List containing most crucial words
     """
 
     # Replace urls starting with 'https' with placeholder
@@ -345,24 +471,19 @@ def tokenizer_light(text):
     """ Lighter version of tokenizer function to perform some light text cleaning prior using OPENAI for embeddings
 
     It's expected that OPENAI are more context-aware, this we should not remove punctuation, stopwords, lemmatize, etc.
-    Example there is a big difference between 'I want to help' and 'want help', is openai aware of this difference?
+    Example: there is a big difference between 'I want to help' and 'want help', is OpenAI aware of this difference?
 
     Most important functions:
     - Summarize url links starting with http or www to a common phrase 'url
     - Summarize email addresses to a common phrase 'email'
     - Get rid of new lines `\n'
-    - Remove all words that are just numbers
-    - Remove all words that contains numbers
     - Cleanup basic punctuation like '..', '. .'
-    - Remove punctuation
-    - Remove words that are just 1 character long after removing punctuation
-    - Use lemmatization to bring words to the base
 
     Args:
-        text -> string: Text sentences to be split into words
+        text → string: Text sentences to be split into words
 
     Return:
-        clean_tokens -> list: List containing most crutial words
+        clean_tokens → list: List containing most crucial words
     """
 
     # Replace urls starting with 'https' with placeholder
@@ -378,7 +499,7 @@ def tokenizer_light(text):
     for url in detected_urls:
         text = text.replace(url, 'url')
 
-        # replace emails with placeholder
+    # replace emails with placeholder
     email_regex = '([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})'
     detected_emails = re.findall(email_regex, text)
     for email in detected_emails:
@@ -398,38 +519,45 @@ def tokenizer_light(text):
 
 
 def word_cloud(counter, title=None, max_words=20):
-    """ Plot word cloud with 20 most used words as default """
+    """
+    Generate a word cloud with the 20 most used words as default.
 
-    f, ax = plt.subplots()
+    Args:
+        counter (dict): A dictionary with words as keys and their counts as values.
+        title (str, optional): Title of the word cloud. Defaults to None.
+        max_words (int): The maximum number of words to generate.
+
+    Return:
+        cloud - class WordCloud
+    """
+
     cloud = WordCloud(
         background_color='white',
         width=2500, height=1800, max_words=max_words,
     ).generate_from_frequencies(frequencies=counter)
-    ax.imshow(cloud)
-    ax.axis('off')
-    plt.title(title, fontsize=30, backgroundcolor='silver')
-    plt.show()
 
-def cat_plot(categories, df):
-    """produces two wordcloud based on key phrases and
-    key adjectives extracted from each neighborhood description
-    inputs:
-        - neighborhood name (string)
-        - list of key phrases (list of strings)
-        - list of adjectives (list of strings)
-    outputs:
-        - two worldclouds
+    return cloud
+
+
+def cat_word_clouds(categories, df):
+    """ Produces word clouds for up to 3 categories
+
+    Args:
+        categories (list): List of categories to print word clouds for e.g. ['Food', 'Water', 'Offer']
+        df (pd.DataFrame): A pandas dataframe containing texts, with col 'message' containing the text to analyze
     """
 
     cv = CountVectorizer(tokenizer=tokenize,
                          token_pattern=None,
                          min_df=3,
-                         max_df=0.9,
+                         max_df=0.95,
                          max_features=8000,
                          ngram_range=(1, 3),
                          )
 
-    for cat in categories:
+    fig = plt.figure(figsize=(14, 4))
+    for i, cat in enumerate(categories):
+        ax = fig.add_subplot(1, 3, i + 1)
         df_cat = df[df[cat] == 1]
 
         tokens = cv.fit_transform(df_cat['message'])
@@ -443,17 +571,22 @@ def cat_plot(categories, df):
         freq = freq.sort_values(by='count', ascending=False)
 
         freq_dict = freq['count'].to_dict()
-        word_cloud(freq_dict, cat)
+        cloud = word_cloud(freq_dict, cat)
+        ax.imshow(cloud)
+        ax.axis('off')
+        ax.set_title(cat)
+
+    plt.suptitle('Word clouds for categories')
+    plt.show()
 
 
-def visualize_tree(xgb, bst, tree_to_plot=0):
-    """ Visualize tree for XGBoost model
+def visualize_tree(bst, tree_to_plot=0):
+    """
+    Visualize a tree of XGBoost model
 
-    # gain: the average gain across all splits the feature is used in.
-    # weight: the number of times a feature is used to split the data across all trees.
-    # cover: the average coverage across all splits the feature is used in.
-    # total_gain: the total gain across all splits the feature is used in.
-    # total_cover: the total coverage across all splits the feature is used in.
+    Args:
+        bst: xgboost model
+        tree_to_plot: number of tree to plot
     """
 
     tree_to_plot = tree_to_plot
@@ -470,6 +603,7 @@ def visualize_tree(xgb, bst, tree_to_plot=0):
     # Modify the current size by the factor
     plt.gcf().set_size_inches(sizefactor * fig_size)
 
-    # The plots can be hard to read (known issue). So, separately save it to a PNG, which makes for easier viewing.
+    # The plots can be hard to read (known issue).
+    # So, separately, save it to a PNG, which makes for easier viewing.
     # fig.savefig('tree' + str(tree_to_plot)+'.png')
     plt.show()

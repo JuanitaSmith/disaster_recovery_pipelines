@@ -8,23 +8,38 @@ The purpose of this project is to demonstrate the ability to create pipelines us
 #### Last date: September 2024
 
 ---
- Disaster Response Pipeline Project using OpenAI and CHATGPT
+ Disaster Response Pipeline Project comparing OpenAI with CountVectorizer and TfidfTransformer
 ---
 
-Are you wondering if modern OpenAI embeddings can build better text classification models that older traditional libraries like scikit learn 
-CountVectorizer, TfidfTransformer that we learned in this Udacity course?
+Are you wondering
+if modern OpenAI embeddings can build better text classification models that older traditional libraries like scikit-learn's CountVectorizer and TfidfTransformer
+that we learned in this Udacity course?
 
-I would expect that OPENAI embeddings are more context-aware and understand relationships between words better, 
+I would expect that OPENAI embeddings are more context-aware and understand **relationships** between words better, 
 than simply doing word counts without context?
 There should be a huge difference between **'I want to help'** and **'want help'**.
 
 Let's find out !!!
 
+<!-- TOC -->
+  * [1. Project Overview](#1-project-overview)
+  * [2. Udacity Project requirements](#2-udacity-project-requirements)
+  * [3. Installation](#3-installation)
+  * [4. Instructions <a name="instructions"></a>](#4-instructions-a-nameinstructionsa-)
+  * [Language translator (optional step)](#language-translator-optional-step)
+  * [4. File Descriptions <a name="files"></a>](#4-file-descriptions-a-namefilesa)
+  * [6. Results<a name="results"></a>](#6-resultsa-nameresultsa)
+    * [Data cleaning](#data-cleaning)
+    * [Modelling results](#modelling-results)
+  * [Skills:](#skills)
+  * [7. Licensing, Authors, Acknowledgements<a name="licensing"></a>](#7-licensing-authors-acknowledgementsa-namelicensinga)
+<!-- TOC -->
+
 
 
 ### Table of Contents
 
-1. [Project Overview](#overview)
+* [1. Project Overview](#overview)
 2. [Udacity Project requirements](#requirements)
 3. [Installation](#installation)
 4. [Instructions](#instructions)
@@ -34,8 +49,8 @@ Let's find out !!!
 8. [Licensing, Authors, and Acknowledgements](#licensing)
 
 
-
-# 1. Project Overview <a name="overview"></a>
+<a name="overview"></a>  
+# 1. Project Overview
 
 This project is using data supplied from [Appen](https://www.appen.com) (formally Figure 8) that contains pre-labeled tweets and text messages that were received during real live disasters.
 Using software and data engineering skills learned during this course, this project build a machine learning pipeline which build a supervised learning model to classify these events so that it can send messages to the appropriate disaster relieve agency.
@@ -53,14 +68,14 @@ The webapp will use the developed classifier model to display the resulting cate
 <img src="images/webapp.png" alt="drawing" width="950"/>
 
 
-## 2. Udacity Project requirements <a name="requirements"></a>
+# 2. Udacity Project requirements
 
 1. Build an ETL pipeline to load and clean messages and store results in a SQLite database 
 2. Build a machine learning pipeline that build a text processing and multi label classification model using GridSearchCV, and export the final model as a pickle file 
 3. Use the trained classifier in the provided Flask Web App, to classify text messages.## 2. Installation <a name="installation"></a>
 
 
-## 3. Installation <a name="installation"></a>
+## 3. Installation
 To clone the repository: https://github.com/JuanitaSmith/disaster_recovery_pipelines.git
 
 - Environment was build using Anaconda.
@@ -90,7 +105,7 @@ To clone the repository: https://github.com/JuanitaSmith/disaster_recovery_pipel
         - sys.argv = ['src/translator.py', 'sk-proj-Niy0AyTYk1ICjnYOq2tWT3BlbkFJMmCr798Q3I5oimPCP8F2', True, 400]
     - 
     - To run ML pipeline that trains classifier and saves
-        `python src/train_classifier.py data/clean/DisasterResponse.db models/classifier.pkl`
+        `python -m src.train_classifier data/clean/DisasterResponse.db models/classifier.pkl`
 
 2. Run the following command in the app's directory to run your web app.
     `python run.py`
@@ -168,6 +183,10 @@ The following data cleaning were completed:
 - To deal with imbalance
   - mloversampler
 
+- metrics used and why
+
+- cross validation approach, use both optuna and gridsearch
+
 before over sampling and after
 
 
@@ -183,9 +202,9 @@ Skills applied in this project:
 
 Web Development using Flask, Plotly and 
 Software Engineering
-- Clean and modular code
+- Clean and modular code, see custom modules and classes
 - GIT version control
-- Automated unit testing using library 'unittest'
+- Automated unit testing using library 'unittest', see folder `tests`
 - Logging - see folder `logging`for logging results
 - Introduction to Object-Oriented Programming - see `src/translator.py` and `mloversampler.py` for custom classes
 Data Engineering:

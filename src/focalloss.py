@@ -38,15 +38,23 @@ class FocalBinaryLoss:
     def focal_binary_cross_entropy(self, pred, targets):
         """ Focal Multilabel Loss
 
-         Function was inspired from a pytorch implementation, see [ref here](https://www.kaggle.com/code/thedrcat/focal-multilabel-loss-in-pytorch-explained)
+        The class calculates focal loss for multi-label binary classification that contains imbalanced data.
+        Function was inspired from a pytorch implementation,
+        see [ref here](https://www.kaggle.com/code/thedrcat/focal-multilabel-loss-in-pytorch-explained)
 
-         Args:
-             pred: label predictions
-             targets: actual labels
+        The gamma parameter is used to reduce the importance of majority classes,
+        forcing the model to focus more on minority classes.
 
-        Returns:
-             focal_loss: focal loss for multilabel classification
+        A model trained with focal loss focuses relatively more on minority class patterns.
+        As a result, it performs better.
+
+        Args:
+            gamma → float: down weighing of majority classes
+
+        Return:
+            focal_loss → float - average focal loss
         """
+
         # number of classes we try to predict
         num_labels = targets.shape[0]
 

@@ -10,6 +10,7 @@ PROJECT_ROOT = PROJECT_ROOT.split(sep='/tests')[0]
 PROJECT_ROOT = PROJECT_ROOT.split(sep='/notebooks')[0]
 PROJECT_ROOT = PROJECT_ROOT.split(sep='/models')[0]
 PROJECT_ROOT = PROJECT_ROOT.split(sep='/app')[0]
+PROJECT_ROOT = PROJECT_ROOT.split(sep='/examples')[0]
 
 # add path where scripts are
 SOURCE_PATH = os.path.join(

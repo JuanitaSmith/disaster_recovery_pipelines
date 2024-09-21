@@ -7,12 +7,16 @@ import nlpaug.augmenter.word as naw
 
 class MLOverSampling:
     """
-    Class to perform over-sampling for minority classes in multi label classification problems
+    Class to perform over-sampling for minority classes in MULTI-LABEL classification problems
 
-    # TO DO: define this a bit better
-    As we are dealing here with NLP, I needed a custom solution
+    Reference: Class was inspired by packages such as 'MLSMOTE'.
+    MLSMOTE needs as input NLP text already converted to a numerical dataset.
+    As I needed to use a pipeline for transformation in this project, I could not use a KNN approach, as in the
+    input as a text string.
 
-    Reference: Class was inspired by packages 'MLSMOTE' and xxx
+    Two Options are available instead:
+    1) Simple copy of the minority classes records multiple times
+    2) Use augmentation to generate new similar sentences by replacing some words with synonyms
 
     Args:
         tail_labels -> list: names of labels that are the minority e.g. ['shops', 'offer']
@@ -21,7 +25,7 @@ class MLOverSampling:
     """
 
     def __init__(self, minority_quantile=0.25, default_ratio=1):
-
+        """ Initialization of class"""
         self.tail_labels = []
         self.minority_quantile = minority_quantile
         self.default_ratio = default_ratio
@@ -33,6 +37,9 @@ class MLOverSampling:
         """
         Find the underrepresented targets.
         Underrepresented targets are those which mean appear in the 0.25 quantile
+
+        Args:
+            y: pd.DataFrame, data labels
         """
 
         grand_total = y.sum(axis=0).sum()
@@ -63,7 +70,7 @@ class MLOverSampling:
 
     def get_sample_ratio(self, y: pd.DataFrame):
         """
-        Targets which are not underrepresented are updated with a factor 1
+        Targets which are NOT underrepresented are updated with a factor 1
         Targets which are underrepresented are updated with factor total mean / target count
 
         Example

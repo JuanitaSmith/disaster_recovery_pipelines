@@ -23,6 +23,7 @@ wordcloud
 pytest
 optuna
 imbalanced-learn
+imbalance-xgboost
 python-graphviz
 graphviz
 nlpaug
