@@ -108,7 +108,7 @@ Ideally do not change this structure.
         (See `5. Language translator with CHATGPT` below for more details)
 
         - To translate 400 more unchecked messages:
-          `python -m src.translator sk-proj-Niy0AyTYk1ICjnYOq2tWT3BlbkFJMmCr798Q3I5oimPCP8F2 True 400`
+          `python -m src.translator <Insert OpenAI API key here> True 400`
 
         - To only accumulate and save previous batch results already executed on OpenAI:
           `python -m src.translator <Insert OpenAI API key here> False 0`
