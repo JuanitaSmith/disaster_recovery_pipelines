@@ -1,4 +1,5 @@
 {% extends "master.html" %}
+
 {% block title %}Results{% endblock %}
 
 {% block message %}
@@ -19,8 +20,5 @@
                     <li class="list-group-item list-group-item-dark text-center">{{category.replace('_', ' ').title()}}</li>
                 {% endif %}
             {% endfor %}
-
-        </div>
-    </div>
-
+        </ul>
 {% endblock %}

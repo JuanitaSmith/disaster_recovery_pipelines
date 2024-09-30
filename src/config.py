@@ -10,6 +10,7 @@ project_root = project_root.split(sep='/tests')[0]
 project_root = project_root.split(sep='/notebooks')[0]
 project_root = project_root.split(sep='/models')[0]
 project_root = project_root.split(sep='/app')[0]
+project_root = project_root.split(sep='/examples')[0]
 
 # FOLDER NAMES
 folder_data = 'data'
@@ -40,6 +41,7 @@ filename_translations = 'translations.csv'
 filename_translations_json_batchjob = 'batch_tasks_language_detection.jsonl'
 filename_translations_json_batchjob_results = 'batch_job_results.jsonl'
 filename_model_featuremap = '../data/models/xgb.fmap'
+filename_embeddings = 'openai_embeddings.csv'
 
 # LINKS TO TABLE NAMES IN SQlite DB
 table_messages = 'messages'
@@ -62,3 +64,4 @@ path_translation_json_batchjob = os.path.join(project_root, folder_translations,
 path_translation_json_batchjob_result = os.path.join(project_root,
                                                      folder_translations,
                                                      filename_translations_json_batchjob_results)
+path_embeddings = os.path.join(project_root, folder_embeddings, filename_embeddings)

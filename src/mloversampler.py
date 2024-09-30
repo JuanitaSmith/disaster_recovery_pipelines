@@ -1,4 +1,4 @@
-"""Class to perform over-sampling for multi label classification """
+"""Class to perform over-sampling for multi-label classification """
 
 import pandas as pd
 import numpy as np

@@ -29,16 +29,13 @@ SOURCE_PATH = os.path.join(
 sys.path.append(PROJECT_ROOT)
 sys.path.append(SOURCE_PATH)
 
-# from src.startingverbtransformer import StartingVerbExtractor
-# from src.mloversampler import MLOverSampling
-# from src.focalloss import FocalBinaryLoss
-# from src import config
 from src.utils import *
 
 app = Flask(__name__)
 
 def get_data():
     """ load data model was trained with """
+
     engine = create_engine(config.path_database)
     conn = engine.connect()
     df = pd.read_sql('select * from messages', con=conn, index_col='id')
@@ -49,42 +46,45 @@ def get_data():
 def return_graphs(df):
     """ Creates plotly visualizations for training data"""
 
-    genre_counts = df.groupby('genre').count()['message']
-    genre_names = list(genre_counts.index)
-
-    # genre distribution
-    graph_one = []
-    graph_one.append(
-        Bar(
-            x=genre_names,
-            y=genre_counts,
-        )
-    )
-
-    layout_one = dict(title=dict(text='Distribution of GENRE', font=18),
-                      xaxis=dict(title='Genre'),
-                      yaxis=dict(title='Count'),
-                      font=dict(size=10),
-                      font_family="Courier New",
-                      type='category',
-                      )
-
     # category distribution
-    graph_two = []
+    graph_one = []
     df_sum = df.sum(numeric_only=True).sort_values(ascending=True)
 
-    graph_two.append(
+    graph_one.append(
         Bar(
             x=df_sum.index,
             y=df_sum,
         )
     )
 
-    layout_two = dict(title=dict(text='Distribution of imbalanced CATEGORIES', font=18),
+    layout_one = dict(title=dict(text='Distribution of imbalanced categories',
+                                 font=dict(family="Arial",size=14, color="blue")),
                       # title_font=dict(size=14),
                       xaxis=dict(title='Categories to predict'),
                       yaxis=dict(title='Count'),
                       font=dict(size=8),
+                      font_family="Courier New",
+                      type='category',
+                      )
+
+    # genre distribution
+    genre_counts = df.groupby('genre').count()['message']
+    genre_names = list(genre_counts.index)
+
+    # genre distribution
+    graph_two = []
+    graph_two.append(
+        Bar(
+            x=genre_names,
+            y=genre_counts,
+        )
+    )
+
+    layout_two = dict(title=dict(text='Distribution of GENRE',
+                                 font=dict(family="Arial",size=14, color="blue")),
+                      xaxis=dict(title='Genre'),
+                      yaxis=dict(title='Count'),
+                      font=dict(size=10),
                       font_family="Courier New",
                       type='category',
                       )
@@ -101,6 +101,7 @@ def return_graphs(df):
 @app.route('/')
 @app.route('/index')
 def index():
+    """ main page of the website """
 
     df, categories = get_data()
     graphs = return_graphs(df)
@@ -116,6 +117,7 @@ def index():
 # web page that handles user query and displays model results
 @app.route('/go')
 def go():
+    """ Web page showing classification results of a message """
 
     # load model
     model = joblib.load(config.path_model)
@@ -142,6 +144,7 @@ def go():
 
 
 def main():
+    """ main routine """
     app.run(host='0.0.0.0', port=3001, debug=True)
 
 

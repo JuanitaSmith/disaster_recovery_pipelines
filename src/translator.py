@@ -1,4 +1,4 @@
-""" Class to convert non_english text to english """
+""" Class to convert non_english text to english with CHATGPT """
 
 import json
 import logging
@@ -28,14 +28,26 @@ class OpenAITranslator:
 
     Note: CHATGPT is a paid service, and takes a long time to translate.
     Just for general experimentation, only a sample of the data will be converted and using batch mode.
-    Translations will be stored in json format in ../data/translations/batch_job_results
-    Update messages database with converted/improved message.
+    Translations will be stored in JSON format in `../data/translations/batch_job_results`
+    Update messages database with improved messages
 
     This class was designed to convert only a portion of the messages for experimental reasons
+
+    Example: Text message for index 9874 will be translated from:
+    `2O TRI PYE, 5 POIRO, 2GD PESI, 1OMORU, 5LAY3DOLA SITWON` to
+    `20 bags of rice, 5 bottles of water, 2 packs of peas, 1 tomato, 5 layers of dollars situation`
 
     """
 
     def __init__(self, openai_api_key, translation=True, max_text_to_translate=2000):
+        """ Class initialization
+
+        Args:
+            openai_api_key (str), API key from OpenAI
+            translation (bool), whether to translate text messages to english with CHATGPT
+            max_text_to_translate (int), maximum number of messages to check and translate to English.
+            The Minimum is 400.
+        """
 
         print('Initialization....')
 
@@ -114,17 +126,14 @@ class OpenAITranslator:
         logger.info('Database connection established ({}_'.format(config.path_database))
 
     def load_data(self):
-        """ Load data to be translated here
+        """
+        Load data to be translated here.
 
         For my scenario, I load data from SQLITE database
-        Two datasets are required:
-
-        Args:
-            filepath -> string: Link to SQLITE database
 
          Returns:
-            df -> pd.DataFrame: data containing text to translate
-            df_translations -> pd.DataFrame: data containing messages already translated
+            df: pd.DataFrame, data containing text to translate
+            df_translations: pd.DataFrame, data containing messages already translated
 
          """
 
@@ -153,15 +162,16 @@ class OpenAITranslator:
         return df_messages, df_translations
 
     def _translate(self, df_messages, df_translations, json_batch_file=config.path_translation_json_batchjob):
-        """ Create OPENAI batches to translate the next_iter sample of text messages
+        """
+        Create OPENAI batches to translate the next_iter sample of text messages
 
         Args:
-            df_messages -> pd.DataFrame: text messages to check and translate
-            df_language -> pd.DataFrame: text messages already processed and checked with OPENAI
-            json_batch_file -> str: file path where json batch data will be stored that are uploaded to OPENAI
+            df_messages: pd.DataFrame, text messages to check and translate
+            df_language: pd.DataFrame, text messages already processed and checked with OPENAI
+            json_batch_file: str, file path where json batch data will be stored that are uploaded to OPENAI
 
         Returns:
-            batches -> list: list of batch numbers created and processed successfully on OPENAI
+            batches:list, list of batch numbers created and processed successfully on OPENAI
         """
 
         print('Translation started...')
@@ -214,7 +224,7 @@ class OpenAITranslator:
                 for obj in tasks:
                     file.write(json.dumps(obj) + '\n')
 
-            # Uploading json file to openai platform
+            # Uploading JSON file to OpenAI platform
             batch_file = self.client.files.create(
                 file=open(config.path_translation_json_batchjob, 'rb'),
                 purpose='batch'
@@ -230,7 +240,7 @@ class OpenAITranslator:
             print('Batch submitted {} for records {}-{}'.format(batch_job.id, self.start, next_iter))
             logger.info('Batch submitted {} for records {}-{}'.format(batch_job.id, self.start, next_iter))
 
-            # Check status of batch job running on openai platform
+            # Check status of batch job running on OpenAI platform
             print('Waiting for batch to start, go to sleep 5 minutes')
             time.sleep(300)
             batch_job = self.client.batches.retrieve(batch_job.id)
@@ -256,10 +266,11 @@ class OpenAITranslator:
         return batches
 
     def _batch_translations_to_json(self, json_file=config.path_translation_json_batchjob_result):
-        """ Download batch jobs results that were submitted on openai and accumulate their results in a local json file
+        """
+        Download batch jobs results that were submitted on openai and accumulate their results in a local json file
 
         Args:
-            json_file -> str: file path to accumulate and store all json results from all batches
+            json_file: str, file path to accumulate and store all json results from all batches
         """
 
         print('Extracting batches into local json files...')
@@ -281,16 +292,16 @@ class OpenAITranslator:
                 logger.info('Batch id {}, Status: {}, Completed: {}, Failed: {}'.format(
                     batch.id, batch.status, batch.request_counts.completed, batch.request_counts.failed))
 
-        # Download batch content from OPENAI and consolidate all api results locally into a json file
+        # Download batch content from OPENAI and consolidate all api results locally into a local JSON file.
         # OPENAI will delete files from batches after 30 days, so we might not be able to retrieve old content
         # file batch_job_results will still contain all those old details so don't delete it, just append
 
-        # append contents of all batches to local json results file
+        # append contents of all batches to a local JSON results file
         for batch in batches:
             batch_job = self.client.batches.retrieve(batch)
             try:
                 result = self.client.files.content(batch_job.output_file_id).content
-                # append contents, keep details of old results, we will remove duplicates later
+                # append contents, keep details of old results; we will remove duplicates later
                 with open(json_file, 'ab') as file:
                     file.write(result)
                 logger.info('Batch file {} output successfully retrieved'.format(batch))
@@ -299,14 +310,14 @@ class OpenAITranslator:
                 logger.info('Batch file {} output already deleted on openai - {}'.format(batch, info))
 
     def _json_translations_to_pandas(self, json_file=config.path_translation_json_batchjob_result):
-        """ Load all json api data from locally saved json file into a pandas dataframe
+        """
+        Load all JSON API data from a locally saved JSON file into a pandas dataframe
 
         Args:
-            df_messages -> pd.DataFrame: pandas dataframe containing original messages
-            json_file -> str: file path where all batch results were stored in json format
+            json_file: str, file path where all batch results were stored in JSON format
 
         Return:
-            df_translations -> pd.DataFrame: dataframe containing all text translations where it was needed
+            df_translations: pd.DataFrame, dataframe containing all text translations where it was necessary
 
         """
 
@@ -367,6 +378,7 @@ class OpenAITranslator:
         return df_translations
 
     def _clean_translations(self, df):
+        """ Clean language translations """
 
         print('Cleaning translations...')
         logger.info('Cleaning translations...')
@@ -475,6 +487,10 @@ if __name__ == '__main__':
             print('\nPlease enter values True or False for the second parameter related to translation')
             sys.exit(1)
 
+        if (translate in ['True']) & (int(max_records_to_translate) < 400):
+            print('\nMinimum records to translate is 400. Please enter an amount >= 400')
+            sys.exit(1)
+
         trans = OpenAITranslator(openai_api_key=api_key,
                                  translation=translate,
                                  max_text_to_translate=max_records_to_translate)
@@ -483,7 +499,7 @@ if __name__ == '__main__':
     else:
         print('\nPlease provide the api key for OpenAI, Boolean indicator (True or False) to trigger translation',
               'and the maximum number of messages to translate '
-              'as the first, second and third argument respectively. \n\nExample: python translater.py '
+              'as the first, second and third argument respectively. \n\nExample: python -m src.translator '
               '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■gTG2jqP8, True, 400.'
               '\nThis will check and translate the next unchecked 400 messages if it is not in English.'
               '\n\nExample: Text message for index 9874 will be translated from'

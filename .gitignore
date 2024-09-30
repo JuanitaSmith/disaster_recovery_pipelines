@@ -4,18 +4,15 @@
 .pyc
 __pycache__
 .ipynb_checkpoints
-data/train
-data/openai*
 cache
 /MLOverSampler/.pytest_cache/
 *.pytest_cache/
-/notebooks/Language transformer using openai- Single Batch.ipynb
 /notebooks/Bayes-Optimization-Demo.ipynb
 /notebooks/ML Pipeline Preparation copy with all experiments.ipynb
 /notebooks/multi_label_metrics.ipynb
-/notebooks/Focal-Loss-Function.ipynb
-/data/clean/DisasterResponseStudyOptuna.db
 tree*
 notebooks/ML Pipeline Preparation - copy with focal loss experiments.ipynb
-/data/clean/DisasterResponseStudyOptuna1.db
 /logs/train_classifier_best_results.log
+/notebooks/Focal-Loss-Function from Avi.ipynb
+data/translations/batch_job_results_old_from_20240925.jsonl
+data/embeddings

@@ -1,7 +1,7 @@
 """
 Unit tests for src/translator.py.
 
-To run this test, use `python -m unittest test.test_translator`
+To run this test, run command `python -m unittest tests.test_translator` in the terminal
 """
 
 from src.translator import OpenAITranslator

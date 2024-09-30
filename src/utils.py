@@ -4,8 +4,8 @@ import nltk
 nltk.download(['punkt', 'wordnet', 'stopwords'])
 
 import pandas as pd
-from sklearn.metrics import classification_report, roc_auc_score, accuracy_score
-from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import classification_report, roc_auc_score, accuracy_score, make_scorer, precision_score
+from sklearn.model_selection import GridSearchCV, cross_val_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
@@ -17,7 +17,6 @@ from nltk.corpus import stopwords
 from nltk.corpus import wordnet
 import re
 from sklearn.feature_extraction.text import CountVectorizer
-from xgboost import plot_tree
 from src import config
 
 from wordcloud import WordCloud
@@ -58,6 +57,14 @@ def evaluate(X, y, model, zero_division=0):
 
 def print_results(y, y_pred):
     """ Print scores after fitting a model
+
+    Precision, recall and F1 scores will be printed by label using scikit-learn `classification_report`.
+    Scores will also be calculated for:
+    - ROC, using scikit-learn metrics `roc_auc_score`.
+    - Overall accuracy: using scikit-learn `accuracy_score`
+      Note: label will only be considered as correct, when all 35 classes in a row are correct.
+      We can expect a low accuracy between 20-30% generally for multi-label solutions.
+    - Mean accuracy by class: using a custom function, calculating the accuracy by label and using the mean
 
     Args:
         y: pd.DataFrame, actual label values
@@ -539,20 +546,29 @@ def word_cloud(counter, title=None, max_words=20):
     return cloud
 
 
-def cat_word_clouds(categories, df):
+def cat_word_clouds(categories, df, max_df=0.95, max_features=8000, ngram_range=(1,1)):
     """ Produces word clouds for up to 3 categories
 
     Args:
         categories (list): List of categories to print word clouds for e.g. ['Food', 'Water', 'Offer']
         df (pd.DataFrame): A pandas dataframe containing texts, with col 'message' containing the text to analyze
+        max_df (float in range [0.0, 1.0] or int):
+            When building the vocabulary, ignore terms that have a document frequency strictly higher than the given
+            threshold (corpus-specific stop words).
+            If float, the parameter represents a proportion of documents, integer absolute counts.
+            This parameter is ignored if vocabulary is not None.
+        max_features (int): If not None, build a vocabulary that only considers the top max_features ordered by term
+            frequency across the corpus.
+            Otherwise, all features are used.
+        ngram_range (tuple): Tuple containing the ngram range used to build the vocabulary.
     """
 
     cv = CountVectorizer(tokenizer=tokenize,
                          token_pattern=None,
                          min_df=3,
-                         max_df=0.95,
-                         max_features=8000,
-                         ngram_range=(1, 3),
+                         max_df=max_df,
+                         max_features=max_features,
+                         ngram_range=ngram_range,
                          )
 
     fig = plt.figure(figsize=(14, 4))
@@ -580,30 +596,43 @@ def cat_word_clouds(categories, df):
     plt.show()
 
 
-def visualize_tree(bst, tree_to_plot=0):
-    """
-    Visualize a tree of XGBoost model
+# Do we need to do another grid search when we add an extra feature? Will it then do better with imbalanced labels again?
+def objective(trial, features, labels, model, eval_score, n_splits=2, random_state=10):
+    """ Grid search using Bayes Optimization with OPTUNA as we can search a lot more parameters faster than GridSearchCV
 
     Args:
-        bst: xgboost model
-        tree_to_plot: number of tree to plot
+        trial
+        features: pd.DataFrame: pandas dataframe containing features (X_train)
+        labels: pd.DataFrame: pandas dataframe containing true labels (y_train)
+        model: estimator, creating with sci-kit learn Pipeline
+        eval_score: scorer callable object created with sci-kit learn make_scorer
+        n_splits: int, number of splits for cross-validation
+        random_state: int, random seed for splitting
+
+    Return:
+        objective_score: score of a trial
     """
 
-    tree_to_plot = tree_to_plot
-    plot_tree(bst, fmap=config.filename_model_featuremap, num_trees=tree_to_plot, rankdir='LR')
+    param = {
+        'clf__max_delta_step': trial.suggest_float('clf__max_delta_step', low=0, high=100),
+        'clf__max_depth': trial.suggest_int('clf__max_depth', low=2, high=12, step=1),
+        'clf__reg_lambda': trial.suggest_float('clf__reg_lambda', low=0.0001, high=40),
+        'clf__gamma': trial.suggest_float('clf__gamma', low=0.0001, high=50),
+        'clf__min_child_weight': trial.suggest_float('clf__min_child_weight', low=1, high=50),
+        'clf__reg_alpha': trial.suggest_float('clf__reg_alpha', low=0.0001, high=40),
+        'clf__learning_rate': trial.suggest_float('clf__learning_rate', low=0.0001, high=10, log=True),
+        'clf__grow_policy': trial.suggest_categorical("clf__grow_policy", ["depthwise", "lossguide"])
+    }
 
-    fig = plt.gcf()
+    model.set_params(**param)
 
-    # Get current size
-    fig_size = fig.get_size_inches()
+    objective_score = cross_val_score(estimator=model,
+                                      X=features,
+                                      y=labels,
+                                      scoring=eval_score,
+                                      cv=MultilabelStratifiedKFold(n_splits=n_splits,
+                                                                   shuffle=True,
+                                                                   random_state=random_state),
+                                      ).mean()
 
-    # Set zoom factor
-    sizefactor = 20
-
-    # Modify the current size by the factor
-    plt.gcf().set_size_inches(sizefactor * fig_size)
-
-    # The plots can be hard to read (known issue).
-    # So, separately, save it to a PNG, which makes for easier viewing.
-    # fig.savefig('tree' + str(tree_to_plot)+'.png')
-    plt.show()
+    return objective_score

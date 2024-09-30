@@ -1,13 +1,11 @@
-2024-09-04 13:27:00 INFO     Loading data...
+2024-09-22 15:02:09 INFO     Loading data...
     MESSAGES: /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_messages.csv
     CATEGORIES: /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_categories.csv
-2024-09-04 13:27:00 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_messages.csv loaded with shape (26248, 4)
-2024-09-04 13:27:00 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_categories.csv loaded with shape (26248, 2)
-2024-09-04 13:27:00 INFO     Cleaning data...
-2024-09-04 13:27:01 INFO     35 categories present after cleaning
-2024-09-04 13:27:01 INFO     Data cleaning completed with shape (26179, 37)
-2024-09-04 13:27:01 INFO     Loading data...
-    MESSAGES: /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_messages.csv
-    CATEGORIES: /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_categories.csv
-2024-09-04 13:27:01 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_messages.csv loaded with shape (26248, 4)
-2024-09-04 13:27:01 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_categories.csv loaded with shape (26248, 2)
+2024-09-22 15:02:09 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_messages.csv loaded with shape (26248, 4)
+2024-09-22 15:02:09 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_categories.csv loaded with shape (26248, 2)
+2024-09-22 15:02:09 INFO     Cleaning data...
+2024-09-22 15:02:10 INFO     35 categories present after cleaning
+2024-09-22 15:02:10 INFO     Data cleaning completed with shape (26179, 37)
+2024-09-22 15:02:10 INFO     Saving data....
+2024-09-22 15:02:10 INFO     DB engine: Engine(sqlite:////Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/clean/DisasterResponse.db)
+2024-09-22 15:02:11 INFO     Cleaned data saved to database sqlite:////Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/clean/DisasterResponse.db

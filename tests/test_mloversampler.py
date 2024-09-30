@@ -1,7 +1,7 @@
 """
 Unit tests for src/mloversampler.py.
 
-To run this test, use `python -m unittest test.test_mloversampler`
+To run this test, run command `python -m unittest tests.test_mloversampler` in the terminal
 """
 
 from src.mloversampler import MLOverSampling

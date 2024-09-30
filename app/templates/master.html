@@ -3,9 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
     <title>Disasters</title>
+
+    <link rel="icon" href="/favicons/favicon.ico" sizes="any"/>
+    <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg?v=M44lzPylqQ"/>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -67,18 +70,74 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container-fluid center border">
     {% block content %}
         <div class="page-header">
             <h1 class="text-center">Overview of Training Dataset</h1>
+            <p class="text-center">Dataset contains 35 categories which are highly imbalanced</p>
         </div>
     {% endblock %}
 
     {% for id in ids %}
-        <div id="{{ ids[1] }}"></div>
-        <div id="{{ ids[0] }}"></div>
+        <div class="chart-container-fluid ms-auto center">
+            <div class="row">
+                {% if id == 'graph-0' %}
+                    <div class="col-md-10 col-md-offset-1">
+                        <div id="{{id}}"></div>
+                    </div>
+                {% else %}
+                    <div class="col-md-6 col-md-offset-3">
+                        <div id="{{id}}"></div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     {% endfor %}
 </div>
+
+<!--charts-->
+{#Imbalanced labels#}
+{#<div class="chart-container-fluid ms-auto center">#}
+{#    <div class="row">#}
+{#        <div class="col-md-10 col-md-offset-1">#}
+{#            <div id="{{ ids[0] }}"></div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+{## genre distribution#}
+{#<div class="chart-container-fluid center">#}
+{#    <div class="row mt-5">#}
+{#        <div class="col-md-6 col-md-offset-3">#}
+{#            <div id="{{ ids[1] }}"></div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+{#Imbalanced labels after multi-label stratified train/test split and oversampling#}
+{#<div class="chart-container-fluid ms-auto center">#}
+{#    <div class="page-header">#}
+{#        <p class="text-center">Imbalanced labels after multi-label stratified train/test split and oversampling of minority classes</p>#}
+{#    </div>#}
+{#    <div class="row">#}
+{#        <div class="col-md-offset-1">#}
+{#            <img class="img-fluid col-md-10" src="/static/assets/oversampling_results.png" alt="oversample">#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+{#Model training results#}
+<div class="container-fluid ms-auto center">
+    <div class="page-header">
+        <p class="text-center">Model training results - Precision score per category</p>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-1">
+            <img class="img-fluid col-md-10" src="/static/assets/model_output_results.png" alt="model">
+        </div>
+    </div>
+</div>
+
 
 <script type="text/javascript">
     const graphs = {{graphJSON | safe}};
