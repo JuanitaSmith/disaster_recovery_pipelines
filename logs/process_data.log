@@ -1,11 +1,46 @@
-2024-09-22 15:02:09 INFO     Loading data...
+2024-09-30 13:58:50 INFO     Loading data...
     MESSAGES: /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_messages.csv
     CATEGORIES: /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_categories.csv
-2024-09-22 15:02:09 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_messages.csv loaded with shape (26248, 4)
-2024-09-22 15:02:09 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_categories.csv loaded with shape (26248, 2)
-2024-09-22 15:02:09 INFO     Cleaning data...
-2024-09-22 15:02:10 INFO     35 categories present after cleaning
-2024-09-22 15:02:10 INFO     Data cleaning completed with shape (26179, 37)
-2024-09-22 15:02:10 INFO     Saving data....
-2024-09-22 15:02:10 INFO     DB engine: Engine(sqlite:////Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/clean/DisasterResponse.db)
-2024-09-22 15:02:11 INFO     Cleaned data saved to database sqlite:////Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/clean/DisasterResponse.db
+2024-09-30 13:58:50 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_messages.csv loaded with shape (26248, 4)
+2024-09-30 13:58:50 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_categories.csv loaded with shape (26248, 2)
+2024-09-30 13:58:50 INFO     Cleaning data...
+2024-09-30 13:58:51 INFO     35 categories present after cleaning
+2024-09-30 13:58:51 INFO     Data cleaning completed with shape (26179, 37)
+2024-09-30 13:58:51 INFO     Loading data...
+    MESSAGES: /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_messages.csv
+    CATEGORIES: /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_categories.csv
+2024-09-30 13:58:51 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_messages.csv loaded with shape (26248, 4)
+2024-09-30 13:58:51 INFO     File /Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/raw/disaster_categories.csv loaded with shape (26248, 2)
+2024-09-30 13:58:51 INFO     Loading data...
+2024-09-30 13:58:52 INFO     Number of messages found 26179
+2024-09-30 13:58:52 INFO      35 categories found: ['related', 'request', 'offer', 'aid_related', 'medical_help', 'medical_products', 'search_and_rescue', 'security', 'military', 'water', 'food', 'shelter', 'clothing', 'money', 'missing_people', 'refugees', 'death', 'other_aid', 'infrastructure_related', 'transport', 'buildings', 'electricity', 'tools', 'hospitals', 'shops', 'aid_centers', 'other_infrastructure', 'weather_related', 'floods', 'storm', 'fire', 'earthquake', 'cold', 'other_weather', 'direct_report']
+2024-09-30 13:58:52 INFO     Shape X: (26179, 2)
+2024-09-30 13:58:52 INFO     Shape y: (26179, 35)
+2024-09-30 13:58:52 INFO     Training shapes before augmentation: (20943, 2) (20943, 35)
+2024-09-30 13:59:22 INFO     Training shapes after augmentation: (36700, 2) (36700, 35)
+2024-09-30 14:07:04 INFO     Loading data...
+2024-09-30 14:07:05 INFO     Number of messages found 26179
+2024-09-30 14:07:05 INFO      35 categories found: ['related', 'request', 'offer', 'aid_related', 'medical_help', 'medical_products', 'search_and_rescue', 'security', 'military', 'water', 'food', 'shelter', 'clothing', 'money', 'missing_people', 'refugees', 'death', 'other_aid', 'infrastructure_related', 'transport', 'buildings', 'electricity', 'tools', 'hospitals', 'shops', 'aid_centers', 'other_infrastructure', 'weather_related', 'floods', 'storm', 'fire', 'earthquake', 'cold', 'other_weather', 'direct_report']
+2024-09-30 14:07:05 INFO     Shape X: (26179, 2)
+2024-09-30 14:07:05 INFO     Shape y: (26179, 35)
+2024-09-30 14:07:05 INFO     Loading data...
+2024-09-30 14:07:05 INFO     Number of messages found 26179
+2024-09-30 14:07:05 INFO      35 categories found: ['related', 'request', 'offer', 'aid_related', 'medical_help', 'medical_products', 'search_and_rescue', 'security', 'military', 'water', 'food', 'shelter', 'clothing', 'money', 'missing_people', 'refugees', 'death', 'other_aid', 'infrastructure_related', 'transport', 'buildings', 'electricity', 'tools', 'hospitals', 'shops', 'aid_centers', 'other_infrastructure', 'weather_related', 'floods', 'storm', 'fire', 'earthquake', 'cold', 'other_weather', 'direct_report']
+2024-09-30 14:07:05 INFO     Shape X: (26179, 2)
+2024-09-30 14:07:05 INFO     Shape y: (26179, 35)
+2024-09-30 14:07:06 INFO     Training shapes before augmentation: (20943, 2) (20943, 35)
+2024-09-30 14:07:34 INFO     Training shapes after augmentation: (36700, 2) (36700, 35)
+2024-09-30 14:07:35 INFO     HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-09-30 14:07:35 INFO     OPENAI API connection established
+2024-09-30 14:07:35 INFO     Database connection established (sqlite:////Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/clean/DisasterResponse.db_
+2024-09-30 14:07:36 INFO     HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-09-30 14:07:36 INFO     OPENAI API connection established
+2024-09-30 14:07:36 INFO     Database connection established (sqlite:////Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/clean/DisasterResponse.db_
+2024-09-30 14:07:36 INFO     Save translations into pandas dataframe ...
+2024-09-30 14:07:36 INFO     Number of translated messages found in json files before cleaning: 7400
+2024-09-30 14:07:37 INFO     HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-09-30 14:07:37 INFO     OPENAI API connection established
+2024-09-30 14:07:37 INFO     Database connection established (sqlite:////Users/juanitasmith/Documents/Udacity/projects/disaster_recovery_pipelines/data/clean/DisasterResponse.db_
+2024-09-30 14:07:37 INFO     Loading data...
+2024-09-30 14:07:37 INFO     Number of messages found 26179
+2024-09-30 14:07:37 INFO     Number of messages already converted: 18600
