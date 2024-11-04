@@ -54,7 +54,7 @@ to classify these events so that it can send messages to the appropriate disaste
 Some organizations care about water, others about blocked roads, others about medical supplies.
 The dataset contains 36 different categories:
 
-<img src="app/static/assets/categories.png" alt="drawing" width="582" height="551"/>
+<img src="disasterapp/static/assets/categories.png" alt="drawing" width="582" height="551"/>
 
 The classifier needs to use **multi-label** classification,
 meaning the same message can be classified as 'water', 'food' and 'clothing'.
@@ -65,7 +65,7 @@ This project includes a web app where an emergency worker can input a new messag
 select the genre, and get immediate classification results.
 The webapp will use the developed classifier model to display the resulting categories for the new message.
 
-<img src="app/static/assets/website_input.png" alt="drawing" width="950"/>
+<img src="disasterapp/static/assets/website_input.png" alt="drawing" width="950"/>
 
 
 # 2. Udacity Project requirements
@@ -127,7 +127,7 @@ Ideally do not change this structure.
 
     4. Run the following command in the **main project directory** to run your web app.
 
-        `python app/run.py`
+        `python disasterapp/run.py`
 
     5. Go to http://0.0.0.0:3001/
 
@@ -267,7 +267,7 @@ User can input a message, select the genre and click on the button 'Classify Mes
 The saved classification model will be used to classify the message.
 All positive classes will be highlighted in green.
 
-<img src="app/static/assets/website_output.png" alt="website_output"/>
+<img src="disasterapp/static/assets/website_output.png" alt="website_output"/>
 
 
 # 9. Classification with OpenAI
@@ -278,7 +278,7 @@ but poor results for imbalanced labels on the left of the graph with macro preci
 
 Surprisingly, `CountVectorizer` and `TfidfTransformer` seems to be winner !!!???
 
-<img src="app/static/assets/openai_comparison.png" alt="openai"/>
+<img src="disasterapp/static/assets/openai_comparison.png" alt="openai"/>
 
 
 
