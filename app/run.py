@@ -1,14 +1,15 @@
 import json
-import plotly
-
-from flask import Flask
-from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
-import joblib
-from sqlalchemy import create_engine
-
 import os
 import sys
+
+import joblib
+import numpy as np
+import pandas as pd
+import plotly
+from flask import Flask
+from flask import render_template, request
+from plotly.graph_objs import Bar
+from sqlalchemy import create_engine
 
 # get current working directory
 PROJECT_ROOT = os.getcwd()
@@ -29,7 +30,7 @@ SOURCE_PATH = os.path.join(
 sys.path.append(PROJECT_ROOT)
 sys.path.append(SOURCE_PATH)
 
-from src.utils import *
+from src import config
 
 app = Flask(__name__)
 
