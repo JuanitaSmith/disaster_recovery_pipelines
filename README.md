@@ -13,6 +13,7 @@ The purpose of this project is to demonstrate the ability to create ETL, NTL and
 ---
 ### Udacity reviewer feedback
 
+
 Your hard work, dedication, and attention to detail are evident in the quality of your project submission. 
 It's refreshing to see a focus on the values and benefits
 it provides rather than getting lost in technical details.
@@ -20,6 +21,7 @@ Many people tend to dive straight into the technical aspects of their projects,
 neglecting to highlight the real-world impact and value that the application brings.
 By emphasizing the importance of your application and its practical benefits,
 you showcase your ability to communicate effectively and highlight the significance of your work.
+
 ---
 ## Comparing OpenAI with CountVectorizer and TfidfTransformer
 
@@ -142,7 +144,8 @@ Ideally do not change this structure.
 
         `python disasterapp/run.py`
 
-    5. Go to http://0.0.0.0:3001/ to run the project locally or visit the website where the project is hosted at https://disasters-JuaSmithy.pythonanywhere.com
+    5. Go to http://0.0.0.0:3001/ to run the project locally or 
+       run hosted webapp on https://disasters-JuaSmithy.pythonanywhere.com
 
     6. Optional: To run unittests, will take around 10-15 minutes
 
