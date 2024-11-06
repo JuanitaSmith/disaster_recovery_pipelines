@@ -8,13 +8,12 @@ The purpose of this project is to demonstrate the ability to create ETL, NTL and
 #### Last date: September 2024
 
 
-### Try out the final project web app [here](disasters-JuaSmithy.pythonanywhere.com)
+### Try out the final project web app on [here](https://disasters-JuaSmithy.pythonanywhere.com)
 
 ---
 ### Udacity reviewer feedback
 
 Your hard work, dedication, and attention to detail are evident in the quality of your project submission. 
-
 It's refreshing to see a focus on the values and benefits
 it provides rather than getting lost in technical details.
 Many people tend to dive straight into the technical aspects of their projects,
@@ -143,7 +142,7 @@ Ideally do not change this structure.
 
         `python disasterapp/run.py`
 
-    5. Go to http://0.0.0.0:3001/ to run the project locally or visit the website where the project is hosted [here](disasters-JuaSmithy.pythonanywhere.com)
+    5. Go to http://0.0.0.0:3001/ to run the project locally or visit the website where the project is hosted [here](https://disasters-JuaSmithy.pythonanywhere.com)
 
     6. Optional: To run unittests, will take around 10-15 minutes
 
