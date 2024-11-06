@@ -240,7 +240,7 @@ XGBOOST algorythm was used, as it now supports multi-label classification out of
 Result after stratified split and oversampling: 
 - Labels are evenly distributed in label datasets before and after stratified split.
 - Oversampling is only applied to the training dataset, number of records increased from 17,452 to 30,815 in the notebook preparation.
-<img src="app/static/assets/oversampling_results.png" alt="oversampling"/>
+<img src="disasterapp/static/assets/oversampling_results.png" alt="oversampling"/>
 
 ### Cross-validation
 
@@ -269,11 +269,11 @@ It's not so easy to get a high precision macro score; it needs extensive enginee
 ### Model performance
 
 Model performance during training using **macro precision** as scoring, is increased after grid search.
-<img src="app/static/assets/model_output_results.png" alt="model_output"/>
+<img src="disasterapp/static/assets/model_output_results.png" alt="model_output"/>
 
 Final model performance on test data is amazing with 0.84 micro precision and 0.86 macro performance !! 
 Great performance on imbalanced labels.
-<img src="app/static/assets/final_model_performance.png" alt="model_output"/>
+<img src="disasterapp/static/assets/final_model_performance.png" alt="model_output"/>
 
 
 # 8. Flask Web App
