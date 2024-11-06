@@ -138,11 +138,11 @@ Ideally do not change this structure.
         - parameter 1: link to SQLite database
         - parameter 2: Where model should be saved
 
-    4. Run the following command in the **main project directory** to run your web app.
+    4. Run the following command in the **main project directory** to run your web app locally.
 
         `python disasterapp/run.py`
 
-    5. Go to http://0.0.0.0:3001/ to run the project locally or visit the website where the project is hosted [here](https://disasters-JuaSmithy.pythonanywhere.com)
+    5. Go to http://0.0.0.0:3001/ to run the project locally or visit the website where the project is hosted at https://disasters-JuaSmithy.pythonanywhere.com
 
     6. Optional: To run unittests, will take around 10-15 minutes
 
