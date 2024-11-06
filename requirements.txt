@@ -20,4 +20,3 @@ wordcloud==1.9.3
 optuna==4.0.0
 nlpaug==1.1.11
 joblib==1.4.0
-unittest==

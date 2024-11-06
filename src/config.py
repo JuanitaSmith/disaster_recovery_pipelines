@@ -9,7 +9,7 @@ project_root = project_root.split(sep='/src')[0]
 project_root = project_root.split(sep='/tests')[0]
 project_root = project_root.split(sep='/notebooks')[0]
 project_root = project_root.split(sep='/models')[0]
-project_root = project_root.split(sep='/app')[0]
+project_root = project_root.split(sep='/disasterapp')[0]
 project_root = project_root.split(sep='/examples')[0]
 
 # FOLDER NAMES
@@ -28,6 +28,7 @@ filename_log_process_data = 'process_data.log'
 filename_log_ml_prep = 'train_classifier_prep.log'
 filename_log_ml = 'train_classifier.log'
 filename_log_translation = 'translation.log'
+filename_log_app = 'disasterapp.log'
 
 # FILE/TABLE NAMES
 filename_messages = 'disaster_messages.csv'
@@ -52,6 +53,7 @@ path_log_process_data = os.path.join(project_root, folder_logs, filename_log_pro
 path_log_ml_prep = os.path.join(project_root, folder_logs, filename_log_ml_prep)
 path_log_ml = os.path.join(project_root, folder_logs, filename_log_ml)
 path_log_translation = os.path.join(project_root, folder_logs, filename_log_translation)
+path_log_app = os.path.join(project_root, folder_logs, filename_log_app)
 path_messages = os.path.join(project_root, folder_raw, filename_messages)
 path_categories = os.path.join(project_root, folder_raw, filename_categories)
 path_database = (folder_db + project_root + '/' + folder_clean + '/' + filename_database)

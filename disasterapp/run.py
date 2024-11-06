@@ -10,6 +10,8 @@ from flask import Flask
 from flask import render_template, request
 from plotly.graph_objs import Bar
 from sqlalchemy import create_engine
+import logging
+logger = logging.getLogger(__name__)
 
 # get current working directory
 PROJECT_ROOT = os.getcwd()
@@ -19,7 +21,7 @@ PROJECT_ROOT = PROJECT_ROOT.split(sep='/src')[0]
 PROJECT_ROOT = PROJECT_ROOT.split(sep='/tests')[0]
 PROJECT_ROOT = PROJECT_ROOT.split(sep='/notebooks')[0]
 PROJECT_ROOT = PROJECT_ROOT.split(sep='/models')[0]
-PROJECT_ROOT = PROJECT_ROOT.split(sep='/app')[0]
+PROJECT_ROOT = PROJECT_ROOT.split(sep='/disasterapp')[0]
 
 # add path where scripts are
 SOURCE_PATH = os.path.join(
@@ -32,11 +34,14 @@ sys.path.append(SOURCE_PATH)
 
 from src import config
 
+logging.basicConfig(filename=config.path_log_app, filemode='w', level=logging.INFO)
+logging.info('Project root: {}'.format(PROJECT_ROOT))
 app = Flask(__name__)
 
 def get_data():
     """ load data model was trained with """
 
+    logging.info('Database path: {}'.format(config.path_database))
     engine = create_engine(config.path_database)
     conn = engine.connect()
     df = pd.read_sql('select * from messages', con=conn, index_col='id')

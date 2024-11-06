@@ -1,7 +1,7 @@
 """ helper functions to support ML pipeline training and visualization """
 
 import nltk
-nltk.download(['punkt', 'wordnet', 'stopwords'])
+nltk.download(['punkt', 'wordnet', 'stopwords', 'averaged_perceptron_tagger'])
 
 import pandas as pd
 from sklearn.metrics import classification_report, roc_auc_score, accuracy_score, make_scorer, precision_score
@@ -17,7 +17,6 @@ from nltk.corpus import stopwords
 from nltk.corpus import wordnet
 import re
 from sklearn.feature_extraction.text import CountVectorizer
-from src import config
 
 from wordcloud import WordCloud
 
